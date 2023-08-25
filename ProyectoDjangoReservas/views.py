@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 
 from ProyectoDjangoReservas.models import Servicio
+from ProyectoDjangoReservas.models import Galeria
 
 #region Inicio
 
@@ -145,7 +146,39 @@ def Eliminar_Servicio (request, id):
     
 #endregion
 
+#region Galeria
 
+def View_Galeria (request):
+
+    imagenes = Galeria.objects.all()
+    
+    context = {
+        'imagenes':imagenes
+    }
+
+    return render (request,'Galeria/Index.html', context)
+
+
+def Subir_imagenes (request):
+
+    if request.method == 'POST':
+        if request.FILES['url_imagen'] and request.POST.get('estado'):
+
+            imagen = Galeria()
+            
+            img = request.FILES['url_imagen']
+            imagen.url_imagen = img
+            estado = request.POST.get('estado')
+            estado =  True if estado == 'True' else False
+            imagen.estado = estado
+
+            imagen.save()
+
+
+    return render (request,'Galeria/SubirImagen.html')
+
+
+#endregion
 
 #region Login
 

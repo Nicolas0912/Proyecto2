@@ -11,3 +11,11 @@ class Servicio(models.Model):
 
     class Meta:
         db_table = 'servicios'
+
+class Galeria(models.Model):
+    id = models.AutoField(primary_key=True)
+    url_imagen = models.ImageField(upload_to='galeria_bd/', null=True)
+    estado = models.BooleanField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'galeria'

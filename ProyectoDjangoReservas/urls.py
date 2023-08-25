@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos
+from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('Login/IniciarSesion', View_Login),
     path('Logout', LogoutUser),
     path('Usuarios/ListadoUser', Listado_Usuarios),
+    path('Galeria/Index', View_Galeria),
 
     
     path('Login/CrearUser', Crear_Usuario),
@@ -40,7 +41,9 @@ urlpatterns = [
     path('Servicio/Actualizar/<int:id>',Actualizar_Servicios),
     path('Servicio/Eliminar/<int:id>',Eliminar_Servicio),
     path('Servicio/Estado/<int:id>',Estado_Servicios, name='/Servicio/Estado/'),
-    path('Servicios/Ocultos', servicios_ocultos, name='/Servicios/Ocultos')
+    path('Servicios/Ocultos', servicios_ocultos, name='/Servicios/Ocultos'),
+
+    path('Galeria/SubirImagen',Subir_imagenes)
 
 ]
 
