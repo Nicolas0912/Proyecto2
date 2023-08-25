@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos
 
@@ -41,3 +43,7 @@ urlpatterns = [
     path('Servicios/Ocultos', servicios_ocultos, name='/Servicios/Ocultos')
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
