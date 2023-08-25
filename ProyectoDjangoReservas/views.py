@@ -32,7 +32,7 @@ def Estado_Servicios (request, id):
 
     servicio.save()
 
-    return redirect ('/Servicios/Index')
+    return redirect ('/Servicios/Ocultos')
 
 def servicios_ocultos(request):
     
