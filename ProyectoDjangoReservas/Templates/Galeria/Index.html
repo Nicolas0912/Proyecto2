@@ -2,27 +2,17 @@
 
 <section class="bg-white dark:bg-gray-900">
     <div class="flex justify-end p-10">
-
         {% if user.is_superuser == 1 %}
         <a href="/Galeria/SubirImagen" class="text-sm bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Agregar</a>
-        <a href="#" class="text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Ocultos</a>
         {% endif %}
     </div>
-    <div class="container mx-auto gap-5">
-        <div class="grid grid-cols-4 gap-5">
+    <div class="columns-4 p-10">
             {% for c in imagenes %}
-            <div class="grid gap-4">
-            <div>
-              <img
-                class="h-auto max-w-full rounded-lg"
-                src="../media/{{ c.url_imagen }}"
-                alt=""
-              />
-            </div>
+            {% if c.estado == True %}
+            <img class="py-2 rounded-3xl" src="../media/{{ c.url_imagen }}" alt=""/>
+            {% endif %}
+            {% endfor %} 
         </div>
-        {% endfor %}
-        </div>
-      </div>
 </section>
 
 {% include "Inc/Footer.html" %}

@@ -158,7 +158,6 @@ def View_Galeria (request):
 
     return render (request,'Galeria/Index.html', context)
 
-
 def Subir_imagenes (request):
 
     if request.method == 'POST':
@@ -173,11 +172,47 @@ def Subir_imagenes (request):
             imagen.estado = estado
 
             imagen.save()
+            
+            return redirect ('/Galeria/Index')
 
 
     return render (request,'Galeria/SubirImagen.html')
 
+def Listado_Imagenes (request):
 
+    imagenes = Galeria.objects.all()
+
+    paginador = Paginator(imagenes,5)
+    pagina = request.GET.get('page') or 1
+    imagenes = paginador.get_page(pagina)
+    current_page = int(pagina)
+
+    paginas = range(1, imagenes.paginator.num_pages + 1)
+
+    context = { 'imagenes':imagenes,'current_page':current_page,'paginas':paginas}
+
+    return render (request,'Galeria/ListadoImagenes.html', context)
+
+def Estado_imagenes (request, id):
+
+    imagenes = Galeria.objects.get(id=id)
+
+    # Cambiar el estado actual al estado opuesto
+    imagenes.estado = not imagenes.estado
+
+    imagenes.save()
+
+    return redirect ('/Galeria/ListadoImagenes')
+
+def Eliminar_imagen (request,id):
+
+    imagen = Galeria.objects.get(id=id)
+    ruta_foto = "media/"+str(imagen.url_imagen)
+
+    os.remove(ruta_foto)
+    imagen.delete()
+
+    return redirect ('/Galeria/ListadoImagenes')
 #endregion
 
 #region Login

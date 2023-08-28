@@ -1,0 +1,81 @@
+{% include "Inc/Header.html" %}
+
+        <!-- Table -->
+        <div class="mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+            <header class="px-5 py-4 border-b border-gray-100">
+                <h2 class="font-semibold text-gray-800">Listado de Imagenes</h2>
+            </header>
+
+            <div class="p-3">
+                <div class="overflow-x-auto">
+                    <table class="table-auto w-full">
+                        <thead class="text-xs font-semibold uppercase text-gray-500 bg-gray-50">
+                            <tr>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Id</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Foto</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Estado</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Acciones</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y divide-gray-100">
+                            {% for c in imagenes %}
+                            <tr>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-center font-medium text-blue-500">{{ c.id }}</div>
+                                </td>
+                                <td class="p-2">
+                                        <img class="h-full w-80 rounded-xl" src="../media/{{ c.url_imagen }}">
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    {% if c.estado == True %}
+                                    <div class="text-center font-medium text-green-500">{{ c.estado }}</div>
+                                    {% else %}
+                                    <div class="text-left font-medium text-red-500">{{ c.estado }}</div>
+                                    {% endif %}
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="px-5 py-3 text-center">
+                                        {% if c.estado == True %}
+                                        <a href="{% url '/Galeria/Estado/' c.id %}" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class='bx bxs-low-vision p-1'></i></i>Ocultar</a>
+                                        {% else %}
+                                        <a href="{% url '/Galeria/Estado/' c.id %}" class=" text-sm bg-green-300 hover:bg-green-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class='bx bx-export p-1'></i></i></i>Visible</a>
+                                        {% endif %}
+                                        <a href="{% url '/Galeria/Eliminar/' c.id %}" class="text-sm bg-red-300 hover:bg-red-400 text-gray-800 font-semibold py-2 px-4 rounded-r"><i class="bx bx-trash p-1"></i>Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="px-5 py-4 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                        <div class="">
+                            {% if imagenes.has_previous %}
+                            <a href="?page={{ imagenes.previous_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                                Prev
+                            </a>
+                            
+                            {% for pagina in paginas %}
+                            <a href="?page={{ pagina }}" class="p-2">{{ pagina }}</a>
+                            {% endfor %}
+                            {% endif %}
+                            {% if imagenes.has_next %}
+                            <a href="?page={{ imagenes.next_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r ml-2">
+                                Next
+                            </a>
+                            
+                            {% endif %}
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+
+{% include "Inc/Footer.html" %}
