@@ -1,4 +1,5 @@
 from django.db import connection, models
+from django.contrib.auth.models import User
 
 class Servicio(models.Model):
     id = models.AutoField(primary_key=True)
@@ -12,6 +13,17 @@ class Servicio(models.Model):
     class Meta:
         db_table = 'servicios'
 
+class Reserva(models.Model):
+    id = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField('Fecha de inicio', auto_now=True, auto_now_add=False)
+    fecha_final = models.DateField('Fecha de fin', auto_now=True, auto_now_add=False)
+    estado = models.BooleanField()
+
+    class Meta:
+        db_table = 'reserva'
+        
 class Galeria(models.Model):
     id = models.AutoField(primary_key=True)
     url_imagen = models.ImageField(upload_to='galeria_bd/', null=True)

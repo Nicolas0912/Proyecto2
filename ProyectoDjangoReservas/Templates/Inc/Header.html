@@ -11,6 +11,9 @@
   <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -28,7 +31,7 @@
     <div>
       <button type="button" @click="profileOpen = !profileOpen" @click.outside="profileOpen = false"
         class="h-9 w-9 overflow-hidden rounded-full">
-        <img src="" alt="perfil" />
+        <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="perfil" />
       </button>
 
       <!-- dropdown profile -->
@@ -37,7 +40,7 @@
         class="absolute right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
         x-show="profileOpen" x-transition>
         <div class="flex items-center space-x-2 p-2">
-          <img src="user-286.svg" alt="plchldr.co" class="h-9 w-9 rounded-full" />
+          <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="plchldr.co" class="h-9 w-9 rounded-full" />
           <div class="font-medium">{{ user.first_name }} {{ user.last_name }}</div>
         </div>
 
