@@ -1,40 +1,52 @@
 {% include "Inc/Header.html" %}
 
 <section class="bg-white dark:bg-gray-900">
-    <div class="container px-6 py-10 mx-auto">
-        <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">{{ servicio.nombre }}
-        </h1>
+    
+    <div class="flex justify-center gap-x-20 pb-10 pt-10">
 
-        <div class="mt-8 lg:-mx-6 lg:flex lg:items-center">
-            <img class="h-auto w-2/5 rounded-lg" src=" /media/{{ servicio.foto }}" alt="">
+        <div class="h-auto max-w-md justify-self-center">
+            <img class="object-scale-down rounded-lg " src=" /media/{{ servicio.foto }}" alt="">
+        </div>
 
-            <div class="mt-6 lg:w-1/2 lg:mt-0 lg:mx-6 ">
-                <p class="text-sm text-blue-500 uppercase">{{ servicio.categoria }}</p>
+        <div class="h-auto max-w-md justify-self-center"> 
+            <div class="pt-4">
+                <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">{{ servicio.nombre }}</h1>
+            </div>
 
-                <p class="mt-4 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
-                    {{ servicio.descripcion }}
-                </p>
+            <div class="py-4">
+                <p>{{ servicio.descripcion }}</p>
+                <p>{{ servicio.categoria }}</p> 
+            </div>
 
-                <div class="fex justify-between">
-                    <div>
-                        <p class="mt-4 text-3xl font-bold text-gray-900 dark:text-white pl-8">$ {{ servicio.precio }}</p>
-                    </div>
+            <div class="fex py-4">
+                <div class="">
+                    <p class="text-2xl font-semibold text-gray-800 ">$ {{ servicio.precio }}</p>
+                </div>
+                
+                <div class="">
+                    <i class='bx bx-swim'></i>
+                    {% if servicio.categoria == 'Habitacion' %}
+                    <i class='bx bx-bed' ></i>
+                    <i class='bx bxs-washer'></i>
+                    <i class='bx bx-restaurant'></i>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-center pt-4"> 
+                <div class="justify-self-center">
+                    <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de llegada:</label>
+                    <input class="rounded-lg " type="date" name="" id=""> 
                 </div>
 
-                <div class="flex justify-between mt-6">
-                    <div class="mx-4">
-                        <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de llegada:</label>
-                        <input class="rounded-lg ml-2" type="date" name="" id=""> 
-                    </div>
-
-                    <div class="mx-4">
-                        <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de salida:</label>
-                        <input class="rounded-lg ml-2" type="date" name="" id=""> 
-                    </div>
+                <div class="justify-self-center">
+                    <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de salida:</label>
+                    <input class="rounded-lg" type="date" name="" id=""> 
                 </div>
             </div>
         </div>
     </div>
+
 </section>
 
 
