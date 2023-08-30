@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen
+from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen, Reserva_Servicio
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,7 +46,9 @@ urlpatterns = [
     path('Galeria/SubirImagen',Subir_imagenes),
     path('Galeria/ListadoImagenes', Listado_Imagenes),  
     path('Galeria/Estado/<int:id>', Estado_imagenes, name='/Galeria/Estado/'),
-    path('Galeria/Eliminar/<int:id>', Eliminar_imagen, name='/Galeria/Eliminar/')
+    path('Galeria/Eliminar/<int:id>', Eliminar_imagen, name='/Galeria/Eliminar/'),
+
+    path('Reservas/ReservarServicio/<int:id>', Reserva_Servicio)
 
 ]
 

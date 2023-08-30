@@ -2,6 +2,7 @@ from django.db import connection
 from django.conf import settings
 from django.db.models import Q
 import os
+from django.shortcuts import render, get_object_or_404
 
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -301,5 +302,18 @@ def Eliminar_Usuario (request, id):
     usuario.delete()
 
     return redirect('/Usuarios/ListadoUser')
+
+#endregion
+
+#region Reservas
+
+def Reserva_Servicio (request,id):
+
+    servicio = get_object_or_404(Servicio, id=id)
+
+    context = {'servicio':servicio}
+
+
+    return render (request,'Reservas/ReservarServicio.html',context)
 
 #endregion
