@@ -14,36 +14,65 @@
             </div>
 
             <div class="py-4">
-                <p>{{ servicio.descripcion }}</p>
-                <p>{{ servicio.categoria }}</p> 
+                <p>{{ servicio.descripcion }}</p> 
             </div>
 
             <div class="fex py-4">
                 <div class="">
-                    <p class="text-2xl font-semibold text-gray-800 ">$ {{ servicio.precio }}</p>
+                    <p class="text-3xl font-semibold text-gray-800 ">$ {{ servicio.precio }}</p>
                 </div>
                 
-                <div class="">
+                <div class="pt-1 text-2xl">
                     <i class='bx bx-swim'></i>
                     {% if servicio.categoria == 'Habitacion' %}
                     <i class='bx bx-bed' ></i>
                     <i class='bx bxs-washer'></i>
                     <i class='bx bx-restaurant'></i>
                     {% endif %}
+                    {% if servicio.categoria == 'Actividad' %}
+                    <i class='bx bxs-tree' ></i>
+                    <i class='bx bxs-ship'></i>
+                    <i class='bx bx-party' ></i>
+                    {% endif %}
                 </div>
             </div>
 
-            <div class="flex justify-center pt-4"> 
-                <div class="justify-self-center">
-                    <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de llegada:</label>
-                    <input class="rounded-lg " type="date" name="" id=""> 
+            <div class="pt-4">
+                <span class="text-lg font-semibold text-blue-500 capitalize dark:text-white">Datos de Reserva:</span>
+            </div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+            <div class="flex pt-4"> 
+                <div class="">
+                    <label class="text-lg text-gray-700 dark:text-gray-200 ">Fecha de llegada:</label>
+                    <input class="rounded-lg " type="date" name="fecha_inicio" id=""> 
                 </div>
 
-                <div class="justify-self-center">
-                    <label class="text-xl text-gray-700 dark:text-gray-200">Fecha de salida:</label>
-                    <input class="rounded-lg" type="date" name="" id=""> 
+                <div class="">
+                    <label class="text-lg text-gray-700 dark:text-gray-200">Fecha de salida:</label>
+                    <input class="rounded-lg" type="date" name="fecha_final" id=""> 
                 </div>
+
             </div>
+            <div class="pt-4">
+                <label class="text-lg text-gray-700 dark:text-gray-200 ">Nombre:</label>
+                <input class="disabled:opacity-75 w-full rounded-lg" disabled type="text" value="{{ user.first_name }} {{ user.last_name }}">
+            </div> 
+            <div class="pt-4">
+                <label class="text-lg text-gray-700 dark:text-gray-200 ">Correo:</label>
+                <input class="disabled:opacity-75 w-full rounded-lg" disabled type="text" value="{{ user.email }}">
+            </div> 
+            <div class="pt-4">
+                <label class="text-lg text-gray-700 dark:text-gray-200 ">Telefono:</label>
+                <input class=" w-full rounded-lg" type="number" name="telefono">
+            </div> 
+
+            <input class="block w-full px-4 py-2 mt-8 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-700 hover:bg-blue-800 focus:outline-none focus:shadow-outline-blue"
+                type="submit" value="Realizar Reserva">
+            </input>
+
+            </form>
         </div>
     </div>
 

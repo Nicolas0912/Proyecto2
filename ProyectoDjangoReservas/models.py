@@ -21,6 +21,7 @@ class Reserva(models.Model):
     fecha_inicio = models.DateField('Fecha de inicio', auto_now=True, auto_now_add=False)
     fecha_final = models.DateField('Fecha de fin', auto_now=True, auto_now_add=False)
     estado = models.BooleanField()
+    telefono = models.CharField(max_length=25, null=True, default=None)
 
     class Meta:
         db_table = 'reserva'

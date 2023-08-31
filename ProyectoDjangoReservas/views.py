@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models import Q
 import os
 from django.shortcuts import render, get_object_or_404
+from datetime import datetime
 
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -14,6 +15,7 @@ from django.contrib.auth import authenticate,login,logout
 
 from ProyectoDjangoReservas.models import Servicio
 from ProyectoDjangoReservas.models import Galeria
+from ProyectoDjangoReservas.models import Reserva
 
 #region Inicio
 
@@ -275,7 +277,7 @@ def Listado_Usuarios (request):
 
     return render(request,'Usuarios/ListadoUsuarios.html',context)
 
-def Actualizar_Usuarios (request, id):
+def Actualizar_Usuarios (request,id):
 
     if request.method == 'POST':
         if request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email') and request.POST.get('is_superuser') and request.POST.get('is_active'):
@@ -307,13 +309,46 @@ def Eliminar_Usuario (request, id):
 
 #region Reservas
 
-def Reserva_Servicio (request,id):
-
+def Reserva_Servicio(request, id):
     servicio = get_object_or_404(Servicio, id=id)
+    usuario = request.user
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_inicio')
+        fecha_final = request.POST.get('fecha_final')
+        telefono = request.POST.get('telefono')
 
-    context = {'servicio':servicio}
+        if fecha_inicio and fecha_final and telefono:
+            reserva = Reserva()
+            reserva.usuario = usuario
+            reserva.servicio = servicio
+            reserva.fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+            reserva.fecha_final = datetime.strptime(fecha_final, '%Y-%m-%d')
+            reserva.estado = True
+            reserva.telefono = telefono
+            reserva.save()
+            return redirect('/Servicios/Index')
+
+    context = {'servicio': servicio}
+    return render(request, 'Reservas/ReservarServicio.html', context)
 
 
-    return render (request,'Reservas/ReservarServicio.html',context)
+def Listado_Reservas (request):
 
+    reserva = Reserva.objects.all()
+
+    busqueda = request.GET.get('buscar')
+    if busqueda:
+        reserva = Reserva.objects.filter(
+            Q(telefono__icontains = busqueda) 
+        ).distinct()
+
+    paginador = Paginator(reserva,10)
+    pagina = request.GET.get('page') or 1
+    reserva = paginador.get_page(pagina)
+    current_page = int(pagina)
+    paginas = range(1, reserva.paginator.num_pages + 1)
+    
+    context = {'reservas':reserva,'current_page':current_page,'paginas':paginas}
+
+    return render(request,'Reservas/ListadoReservas.html', context)
 #endregion
