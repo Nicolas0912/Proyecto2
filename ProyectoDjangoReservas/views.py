@@ -316,15 +316,17 @@ def Reserva_Servicio(request, id):
         fecha_inicio = request.POST.get('fecha_inicio')
         fecha_final = request.POST.get('fecha_final')
         telefono = request.POST.get('telefono')
+        documento = request.POST.get('documento')
 
-        if fecha_inicio and fecha_final and telefono:
+        if fecha_inicio and fecha_final and telefono and documento:
             reserva = Reserva()
             reserva.usuario = usuario
             reserva.servicio = servicio
-            reserva.fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-            reserva.fecha_final = datetime.strptime(fecha_final, '%Y-%m-%d')
+            reserva.fecha_inicio = request.POST.get('fecha_inicio') 
+            reserva.fecha_final = request.POST.get('fecha_final')
             reserva.estado = True
             reserva.telefono = telefono
+            reserva.documento = request.POST.get('documento')
             reserva.save()
             return redirect('/Servicios/Index')
 
@@ -339,7 +341,7 @@ def Listado_Reservas (request):
     busqueda = request.GET.get('buscar')
     if busqueda:
         reserva = Reserva.objects.filter(
-            Q(telefono__icontains = busqueda) 
+            Q(documento__icontains = busqueda) 
         ).distinct()
 
     paginador = Paginator(reserva,10)
@@ -351,4 +353,23 @@ def Listado_Reservas (request):
     context = {'reservas':reserva,'current_page':current_page,'paginas':paginas}
 
     return render(request,'Reservas/ListadoReservas.html', context)
+
+def Estado_Reserva(request, id):
+
+    reserva = Reserva.objects.get(id=id)
+
+    # Cambiar el estado actual al estado opuesto
+    reserva.estado = not reserva.estado
+
+    reserva.save()
+
+    return redirect ('/Reservas/ListadoReservas')
+
+def Reservas_Usuario (request):
+
+    reservas = Reserva.objects.all()
+
+    context = {'reservas':reservas}
+
+    return render(request,'Reservas/ReservasUsuario.html',context)
 #endregion

@@ -23,6 +23,9 @@
                                     <div class="font-semibold text-left">Id</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Documento</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Usuario</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
@@ -41,7 +44,7 @@
                                     <div class="font-semibold text-left">Fecha Final</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Estado</div>
+                                    <div class="font-semibold text-left">Activo</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-center">Acciones</div>
@@ -53,6 +56,9 @@
                             <tr>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="text-left font-medium text-blue-500">{{ c.id }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-left">{{ c.documento }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="text-left">{{ c.usuario.first_name }} {{ c.usuario.last_name }}</div>
@@ -83,7 +89,7 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="px-5 py-3 text-center">
-                                        <a href="#" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class="bx bx-edit-alt p-1"></i>Finalizar</a>
+                                        <a href="{% url '/Reservas/Estado/' c.id %}" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class="bx bx-edit-alt p-1"></i>Finalizar</a>
                                         <a href="#" class="text-sm bg-red-300 hover:bg-red-400 text-gray-800 font-semibold py-2 px-4 rounded-r"><i class="bx bx-trash p-1"></i>Eliminar</a>
                                     </div>
                                 </td>

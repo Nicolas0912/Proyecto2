@@ -1,0 +1,21 @@
+{% include "Inc/Header.html" %}
+
+
+<section class="bg-white dark:bg-gray-900">
+    <div class="flex justify-between grid grid-cols-3 gap-6 m-10 mb-10 p-10">
+        {% for c in reservas %}
+        {% if c.usuario == request.user %}  <!-- Filtrar solo las reservas del usuario activo -->
+        <!-- START Card component -->
+    <div class="container bg-white shadow-lg rounded-2xl p-5">
+            <h1 class="font-bold text-blue-500">{{ c.servicio.nombre}}</h1>
+            <h6 class="font-light text-gray-500 hover:font-bold pt-2">{{ c.fecha_inicio}} - {{ c.fecha_final}}</h6>
+            <p class="text-sm text-gray-400 hover:text-gray-500 pt-2 pb-5">{{ c.servicio.descripcion}}</p>
+            <a href="#" class="rounded-lg py-2 px-4 text-center text-white bg-blue-300 hover:bg-blue-500">Ver Servicio</a>
+    </div>
+        <!-- END Card component -->
+        {% endif %}
+        {% endfor %}
+    </div>  
+</section>
+    
+{% include "Inc/Footer.html" %}
