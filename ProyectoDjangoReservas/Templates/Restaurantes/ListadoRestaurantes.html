@@ -1,0 +1,104 @@
+{% include "Inc/header.html" %}
+
+<div class="mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+    <header class="px-5 py-4 border-b border-gray-100">
+        <h2 class="font-semibold text-gray-800">Listado de Restaurantes</h2>
+    </header>
+    <form action="" method="get" enctype="multipart/form-data">
+        <div class="relative max-w-md w-full p-4">
+            <input class="w-full h-10 pl-10 pr-4 py-1 text-base placeholder-gray-500 border rounded-full focus:shadow-outline" type="search" placeholder="Buscar..." name="buscar">
+            <div class="absolute top-1 left-2 inline-flex items-center p-6">
+                <button class="bx bx-search text-gray-400" type="submit"></button>
+            </div>
+        </div>
+    </form>
+    <div class="p-3">
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full">
+                <thead class="text-xs font-semibold uppercase text-gray-500 bg-gray-50">
+                    <tr>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">Id</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">Nombre</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">Foto</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">Descripcion</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">ubicacion</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-center">Estado</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-center">Acciones</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100">
+                    {% for c in restaurantes %}
+                    <tr>
+                        <td class="p-2 whitespace-nowrap">
+                            <div class="text-left font-medium text-blue-500">{{ c.id }}</div>
+                        </td>
+                        <td class="p-2 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="font-medium text-gray-800">{{ c.name }}</div>
+                            </div>
+                        </td>
+                        <td class="p-2">
+                                <img class="h-full w-80 rounded-xl" src="../media/{{ c.url_img }}" alt="{{ c.url_img }}">
+                        </td>
+                        <td class="p-2 whitespace-normal">
+                            <div class="text-left">
+                                    {{ c.descripcion }}
+                            </div>
+                        </td>
+                        <td class="p-2 whitespace-nowrap">
+                            <div class="text-left">{{ c.ubicacion }}</div>
+                        </td>
+                        <td class="p-2 whitespace-nowrap">
+                            {% if c.is_active == True %}
+                            <div class="text-left font-medium text-green-500">{{ c.is_active }}</div>
+                            {% else %}
+                            <div class="text-left font-medium text-red-500">{{ c.is_active }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="p-2 whitespace-nowrap">
+                            <div class="px-5 py-3 text-center">
+                                <a href="#" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class="bx bx-edit-alt p-1"></i>Editar</a>
+                                <a href="#" class="text-sm bg-red-300 hover:bg-red-400 text-gray-800 font-semibold py-2 px-4 rounded-r"><i class="bx bx-trash p-1"></i>Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="px-5 py-4 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                <div class="">
+                    {% if restaurantes.has_previous %}
+                    <a href="?page={{ restaurantes.previous_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                        Prev
+                    </a>
+                    
+                    {% for pagina in paginas %}
+                    <a href="?page={{ pagina }}" class="p-2">{{ pagina }}</a>
+                    {% endfor %}
+                    {% endif %}
+                    {% if restaurantes.has_next %}
+                    <a href="?page={{ restaurantes.next_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r ml-2">
+                        Next
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+{% include "Inc/Footer.html" %}

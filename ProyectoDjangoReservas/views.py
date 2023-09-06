@@ -13,9 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 
-from ProyectoDjangoReservas.models import Servicio
-from ProyectoDjangoReservas.models import Galeria
-from ProyectoDjangoReservas.models import Reserva
+from ProyectoDjangoReservas.models import Servicio, Galeria, Reserva, Restaurante
 
 #region Inicio
 
@@ -333,7 +331,6 @@ def Reserva_Servicio(request, id):
     context = {'servicio': servicio}
     return render(request, 'Reservas/ReservarServicio.html', context)
 
-
 def Listado_Reservas (request):
 
     reserva = Reserva.objects.all()
@@ -372,4 +369,58 @@ def Reservas_Usuario (request):
     context = {'reservas':reservas}
 
     return render(request,'Reservas/ReservasUsuario.html',context)
+#endregion
+
+
+# region restaurantes
+
+def View_Restaurantes (request):
+
+    restaurantes = Restaurante.objects.all()
+
+    cantidad_restaurantes = Restaurante.objects.count()
+
+    context = {'restaurantes':restaurantes,
+               'cantidad_restaurantes': cantidad_restaurantes}
+
+
+    return render (request,'Restaurantes/Index.html', context)
+
+def Agregar_Restaurante(request):
+    if request.method == 'POST':
+        if request.POST.get('name') and request.FILES['url_img'] and request.POST.get('descripcion') and request.POST.get('ubicacion') and request.POST.get('estado'):
+            restaurante = Restaurante()
+            restaurante.name = request.POST.get('name')
+            restaurante.url_img = request.FILES['url_img']
+            restaurante.descripcion = request.POST.get('descripcion')
+            restaurante.ubicacion = request.POST.get('ubicacion')
+            estado = request.POST.get('is_active')
+            estado = True if estado == 'True' else False
+            restaurante.is_active = estado
+            restaurante.save()  # Guarda el restaurante en la base de datos
+
+            return redirect('/Restaurantes/Index')
+    return render(request, 'Restaurantes/AgregarRestaurantes.html')
+
+def Listado_Restaurantes (request):
+
+    busqueda = request.GET.get('buscar')
+
+    restaurante = Restaurante.objects.all()
+
+    if busqueda:
+        restaurante = Restaurante.objects.filter(
+            Q(name__icontains = busqueda)
+        ).distinct()
+
+    paginador = Paginator(restaurante,5)
+    pagina = request.GET.get('page') or 1
+    restaurante = paginador.get_page(pagina)
+    current_page = int(pagina)
+
+    paginas = range(1, restaurante.paginator.num_pages + 1)
+
+    context = { 'restaurantes':restaurante,'current_page':current_page,'paginas':paginas}
+    
+    return render(request,'Restaurantes/ListadoRestaurantes.html',context)
 #endregion

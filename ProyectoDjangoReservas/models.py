@@ -34,3 +34,14 @@ class Galeria(models.Model):
 
     class Meta:
         db_table = 'galeria'
+
+class Restaurante(models.Model):
+    id = models.AutoField(primary_key=True)
+    url_img = models.ImageField(upload_to='restaurante_bd/', null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    descripcion = models.CharField(max_length=255, blank=True, null=True)
+    ubicacion = models.CharField(max_length=255,blank=True, null=True)
+    is_active = models.BooleanField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'restaurante'
