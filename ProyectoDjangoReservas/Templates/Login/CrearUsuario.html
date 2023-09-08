@@ -4,51 +4,60 @@
         <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
             <div class="flex flex-col overflow-y-auto md:flex-row">
                 <div class="h-32 md:h-auto md:w-1/2">
-                    <img aria-hidden="true" class="object-cover w-full h-full dark:hidden"
-                        src="https://a0.muscache.com/im/pictures/b6755c62-7f06-4564-a82d-874fe9db3584.jpg?im_w=1440"
-                        alt="Office" />
-                    <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block"
-                        src="https://a0.muscache.com/im/pictures/b6755c62-7f06-4564-a82d-874fe9db3584.jpg?im_w=1440"
-                        alt="Office" />
+                    <img aria-hidden="true" class="h-full dark:hidden"
+                        src="/media/logos/logo.jpg"
+                        alt="Office"/>
                 </div>
                 <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
 
                     <div class="w-full">
 
-                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                            Create account
+                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200 pt">
+                            Create a Account
                         </h1>
                         <form action="" method="post">
                             {% csrf_token %}
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Nombre</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Name" name="first_name"required/>
-                            </label>
+
+
+                            <div class="grid grid-cols-2 gap-5">
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Nombre(s):</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray rounded-lg"
+                                        placeholder="Name" name="first_name"required/>
+                                </label>
+        
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Apellido(s)</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray rounded-lg"
+                                        placeholder="Last Name" name="last_name"required/>
+                                </label>
+                            </div>
     
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Apellidos</span>
+                                <span class="text-gray-700 dark:text-gray-400">Correo Electronico:</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Lastname" name="last_name"required/>
-                            </label>
-    
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Email</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray rounded-lg"
                                     placeholder="Email" name="email" required/>
                             </label>
+
+                            <div class="">
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Contraseña:</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray rounded-lg"
+                                        placeholder="Password" type="password" name="password" required/>
+                                </label>
+                                <label class="block mt-4 text-sm">
+                                    <span class="text-gray-700 dark:text-gray-400">Confirmar Contraseña:</span>
+                                    <input
+                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray rounded-lg"
+                                        placeholder="Password" type="password" name="confirm_password" required/>
+                                </label>
+                            </div>
     
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Password</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Your Password" type="password" name="password" required/>
-                            </label>
-    
-                            <div class="flex mt-6 text-sm">
+                            <div class="flex mt-6 text-sm pt-5">
                                 <label class="flex items-center dark:text-gray-400">
                                     <input type="checkbox"
                                         class="text-blue-600 form-checkbox focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:focus:shadow-outline-gray" />

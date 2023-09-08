@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 
-from ProyectoDjangoReservas.models import Servicio, Galeria, Reserva, Restaurante
+from ProyectoDjangoReservas.models import Servicio, Galeria, Reserva, Restaurante, Profile
 
 #region Inicio
 
@@ -242,19 +242,35 @@ def LogoutUser(request):
 def Crear_Usuario (request):
 
     if request.method == 'POST':
-        if request.POST.get('password') and request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email'):
+        if request.POST.get('password') and request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email') and request.POST.get('confirm_password'):
+        
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
 
-            Usuario = User.objects.create_user(username = request.POST.get('email'), email=request.POST.get('email'), password=request.POST.get('password'), first_name = request.POST.get('first_name'), last_name = request.POST.get('last_name'))
-            Usuario.save()
+            if password == confirm_password:
+                Usuario = User.objects.create_user(username = request.POST.get('email'), email=request.POST.get('email'), password=request.POST.get('password'), first_name = request.POST.get('first_name'), last_name = request.POST.get('last_name'))
+                Usuario.save()
 
-            return redirect('/Login/IniciarSesion')
+                # Iniciar sesión automáticamente en el usuario creado
+                user = authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
+                if user is not None:
+                    login(request, user)
+
+                # Obtener el ID del usuario recién creado
+                id = Usuario.id
+                return redirect(f'/Usuario/Actualizar/{id}')
+            else:
+                # Las contraseñas no son iguales, puedes mostrar un mensaje de error o realizar alguna otra acción
+                return HttpResponse('Las contraseñas no coinciden')
     else:
         return render (request,'Login/CrearUsuario.html')
-    
+
+
 def Listado_Usuarios (request):
     
     busqueda = request.GET.get('buscar')
     usuario = User.objects.all()
+    profile = Profile.objects.all()
 
     if busqueda:
         usuario = User.objects.filter(
@@ -270,7 +286,7 @@ def Listado_Usuarios (request):
 
     paginas = range(1, usuario.paginator.num_pages + 1)
 
-    context = { 'usuario':usuario,'current_page':current_page,'paginas':paginas}
+    context = { 'usuario':usuario,'current_page':current_page,'paginas':paginas,'profile':profile}
     
 
     return render(request,'Usuarios/ListadoUsuarios.html',context)
@@ -278,19 +294,21 @@ def Listado_Usuarios (request):
 def Actualizar_Usuarios (request,id):
 
     if request.method == 'POST':
-        if request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email') and request.POST.get('is_superuser') and request.POST.get('is_active'):
+        telefono = request.POST.get('telefono')
+        documento = request.POST.get('documento')
+        profile_img = request.FILES['profile_img']
             
-            usuario = User.objects.get(id=id)
+        # Obtener el usuario actual
+        usuario = request.user
 
-            usuario.first_name = request.POST.get('first_name')
-            usuario.last_name = request.POST.get('last_name')
-            usuario.email = request.POST.get('email')
-            usuario.is_superuser = request.POST.get('is_superuser')
-            usuario.is_active = request.POST.get('is_active')
+        id = usuario.id
 
-            usuario.save()
+        # Crear un nuevo objeto Profile con los datos del formulario
+        profile = Profile(id=id, telefono=telefono, documento=documento, profile_img=profile_img, auth_user=usuario)
 
-            return redirect ('/Usuarios/ListadoUser')
+        profile.save()
+
+        return redirect ('/Usuarios/ListadoUser')
     else:
         usuario = User.objects.filter(id=id)
         return render (request, 'Usuarios/ActualizarUsuarios.html', {'usuario':usuario})
@@ -395,7 +413,7 @@ def Agregar_Restaurante(request):
             restaurante.descripcion = request.POST.get('descripcion')
             restaurante.ubicacion = request.POST.get('ubicacion')
             estado = request.POST.get('is_active')
-            estado = True if estado == 'True' else False
+            estado = True if estado == 'False' else False
             restaurante.is_active = estado
             restaurante.save()  # Guarda el restaurante en la base de datos
 

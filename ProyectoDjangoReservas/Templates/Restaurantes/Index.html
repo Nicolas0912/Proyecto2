@@ -1,25 +1,24 @@
 {% include "Inc/Header.html" %}
 
-
 <section class="bg-white dark:bg-gray-900">
-
     <div class="container px-6 py-8 mx-auto">
-        <div class="lg:flex lg:-mx-2">
+        <div class="flex justify-around">
             <div class="mt-6 lg:mt-0 lg:px-2 lg:w-4/5 ">
                 <div class="flex items-center justify-between text-sm tracking-widest uppercase ">
-                    <a href="/Restaurantes/Index" class="text-gray-500 dark:text-gray-300">RESTAURANTES {{ cantidad_restaurantes }}</a>
+                    <a href="/restaurantes/Index" class="text-gray-500 dark:text-gray-300">RESTAURANTES {{ cantidad_restaurantes }}</a>
                     <div class="flex items-center">
 
 						{% if user.is_superuser == 1 %}
                         <a href="/Restaurantes/Agregar" class="text-sm bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Agregar</a>
-						<a href="#" class="text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Ocultos</a>
+						<a href="" class="text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Ocultos</a>
 						{% endif %}
                     </div>
                 </div>
 
 				<div class="grid grid-cols-3 gap-10 content-start pt-10">
-					{% for c in restaurantes %}
+					{% for c in restaurantes%}
 					<!-- This is an example component -->
+					{% if c.is_active == True %}
 					<div class="max-w-2xl ">
 						<div class="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700">
 							<div class="flex items-center justify-between p-2">
@@ -35,24 +34,43 @@
 							{% endif %}
 							</div>
 
-							<img class="h-80 w-full rounded-xl p-2" src="../media/{{ c.url_img }}" alt="product image {{ c.url_img }}">
-							<div class="px-5 pb-5">
+								<img class="h-80 w-full rounded-xl p-2" src="../media/{{ c.url_img }}" alt="product image {{ c.url_img }}">
+								<div class="px-5 pb-5">
 									<a href="#">
-										<h3 class="text-gray-900 font-semibold text-xl tracking-tight dark:text-white">{{ c.name }}</h3>
+										<h3 class="text-gray-900 font-semibold text-xl tracking-tight dark:text-white">{{ c.ubicacion }}</h3>
 										<span>{{ c.descripcion }}<span>
-									<div class="flex items-center justify-between">
-										<span class="text-3xl font-bold text-gray-900 dark:text-white">{{ c.ubicacion }}</span>
+									
+									<div class="flex items-center mt-2.5 mb-5">
+										<svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000svg">
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+										</svg>
+										<svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+										</svg>
+										<svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+										</svg>
+										<svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+										</svg>
+										<svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+										</svg>
+										<span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
 									</div>
-							</div>
+									<div class="flex items-center justify-between">
+										<span class="text-3xl font-bold text-gray-900 dark:text-white">{{ c.name }}</span>
+										<a href="#"class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Ver en Maps</a>
+									</div>
+								</div>
 						</div>
-						
 					</div>
+					{% endif %}
 					{% endfor %}
 				</div>
-
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% include "Inc/Footer.html" %}

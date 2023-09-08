@@ -23,10 +23,19 @@
                                     <div class="font-semibold text-left">Id</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Foto Perfil</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Nombre</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Nº Documento</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Email</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Telefono</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Administrador</div>
@@ -40,31 +49,40 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
-                            {% for c in usuario %}
+                            {% for c in profile %}
                             <tr>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium text-blue-500">{{ c.id }}</div>
+                                    <div class="text-left font-medium text-blue-500">{{ c.auth_user.id }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-left font-medium text-blue-500">{{ c.profile_img }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">{{ c.first_name }} {{ c.last_name }}</div>
+                                        <div class="font-medium text-gray-800">{{ c.auth_user.first_name }} {{ c.auth_user.last_name }}</div>
                                     </div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.email }}</div>
+                                    <div class="text-left">{{ c.documento }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    {% if c.is_superuser == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.is_superuser }}</div>
+                                    <div class="text-left">{{ c.auth_user.email }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-left">{{ c.telefono }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    {% if c.auth_user.is_superuser == True %}
+                                    <div class="text-left font-medium text-green-500">{{ c.auth_user.is_superuser }}</div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.is_superuser }}</div>
+                                    <div class="text-left font-medium text-red-500">{{ c.auth_user.is_superuser }}</div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    {% if c.is_active == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.is_active }}</div>
+                                    {% if c.auth_user.is_active == True %}
+                                    <div class="text-left font-medium text-green-500">{{ c.auth_user.is_active }}</div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.is_active }}</div>
+                                    <div class="text-left font-medium text-red-500">{{ c.auth_user.is_active }}</div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
