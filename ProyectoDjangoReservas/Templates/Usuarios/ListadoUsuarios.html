@@ -55,7 +55,7 @@
                                     <div class="text-left font-medium text-blue-500">{{ c.auth_user.id }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium text-blue-500">{{ c.profile_img }}</div>
+                                    <img class="w-8 h-8 rounded-full" src="/media/{{ c.profile_img }}" alt="{{ c.profile_img }}">
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -73,16 +73,16 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.auth_user.is_superuser == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.auth_user.is_superuser }}</div>
+                                    <div class="text-left font-medium text-green-500"><a href="{% url '/Usuario/Admin/' c.auth_user.id %}">{{ c.auth_user.is_superuser }}</a></div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.auth_user.is_superuser }}</div>
+                                    <div class="text-left font-medium text-red-500"><a href="{% url '/Usuario/Admin/' c.auth_user.id %}">{{ c.auth_user.is_superuser }}</a></div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.auth_user.is_active == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.auth_user.is_active }}</div>
+                                    <div class="text-left font-medium text-green-500"><a href="{% url '/Usuario/Estado/' c.auth_user.id %}">{{ c.auth_user.is_active }}</a></div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.auth_user.is_active }}</div>
+                                    <div class="text-left font-medium text-red-500"><a href="{% url '/Usuario/Estado/' c.auth_user.id %}">{{ c.auth_user.is_active }}</a></div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">

@@ -24,7 +24,6 @@ class Servicio(models.Model):
 
 class Reserva(models.Model):
     id = models.AutoField(primary_key=True)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     fecha_inicio = models.DateField('Fecha de inicio', auto_now=False, auto_now_add=False)
     fecha_final = models.DateField('Fecha de fin', auto_now=False, auto_now_add=False)

@@ -258,13 +258,12 @@ def Crear_Usuario (request):
 
                 # Obtener el ID del usuario recién creado
                 id = Usuario.id
-                return redirect(f'/Usuario/Actualizar/{id}')
+                return redirect(f'/Usuario/Perfil/{id}')
             else:
                 # Las contraseñas no son iguales, puedes mostrar un mensaje de error o realizar alguna otra acción
                 return HttpResponse('Las contraseñas no coinciden')
     else:
         return render (request,'Login/CrearUsuario.html')
-
 
 def Listado_Usuarios (request):
     
@@ -291,7 +290,39 @@ def Listado_Usuarios (request):
 
     return render(request,'Usuarios/ListadoUsuarios.html',context)
 
-def Actualizar_Usuarios (request,id):
+def Actualizar_Usuarios(request, id):
+    if request.method == 'POST':
+        perfil_img = request.FILES.get('profile_img')
+        telefono = request.POST.get('telefono')
+        documento = request.POST.get('documento')
+        
+        if perfil_img and telefono and documento:
+            perfil = Profile.objects.get(id=id)
+            ruta_foto = "media/" + str(perfil.profile_img)
+            os.remove(ruta_foto)
+            perfil.profile_img = perfil_img
+            perfil.telefono = telefono
+            perfil.documento = documento
+            perfil.save()
+        
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        
+        if first_name and last_name and email:
+            usuario = User.objects.get(id=id)
+            usuario.first_name = first_name
+            usuario.last_name = last_name
+            usuario.email = email
+            usuario.username = email
+            usuario.save()
+        
+        return redirect('/Usuarios/ListadoUser')
+    else:
+        perfil = Profile.objects.filter(id=id)
+        return render(request, 'Usuarios/ActualizarUsuarios.html', {'perfil': perfil})
+    
+def Perfil_Usuarios (request,id):
 
     if request.method == 'POST':
         telefono = request.POST.get('telefono')
@@ -308,19 +339,40 @@ def Actualizar_Usuarios (request,id):
 
         profile.save()
 
-        return redirect ('/Usuarios/ListadoUser')
+        return redirect ('/Index/Home')
     else:
         usuario = User.objects.filter(id=id)
-        return render (request, 'Usuarios/ActualizarUsuarios.html', {'usuario':usuario})
+        return render (request, 'Usuarios/CompletarPerfil.html', {'usuario':usuario})
 
 def Eliminar_Usuario (request, id):
 
+    perfil = Profile.objects.get(id=id)
+    perfil.delete()
+
+    usuario = User.objects.get(id=id)
+    usuario.delete()
+    
+    return redirect('/Usuarios/ListadoUser')
+
+def Estado_Usuario(request, id):
     usuario = User.objects.get(id=id)
 
-    usuario.delete()
+    # Cambiar el estado actual al estado opuesto
+    usuario.is_active = not usuario.is_active
+
+    usuario.save()
 
     return redirect('/Usuarios/ListadoUser')
 
+def Usuario_admin(request, id):
+    usuario = User.objects.get(id=id)
+
+    # Cambiar el estado actual al estado opuesto
+    usuario.is_superuser = not usuario.is_superuser
+
+    usuario.save()
+
+    return redirect('/Usuarios/ListadoUser')
 #endregion
 
 #region Reservas

@@ -36,7 +36,7 @@
     <div>
       <button type="button" @click="profileOpen = !profileOpen" @click.outside="profileOpen = false"
         class="h-9 w-9 overflow-hidden rounded-full">
-        <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="perfil" />
+        <img src="{{ c.profile_img }}" alt="perfil" />
       </button>
 
       <!-- dropdown profile -->
@@ -45,12 +45,12 @@
         class="absolute right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
         x-show="profileOpen" x-transition>
         <div class="flex items-center space-x-2 p-2">
-          <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="plchldr.co" class="h-9 w-9 rounded-full" />
+          <img src="{{ c.profile_img }}" alt="plchldr.co" class="h-9 w-9 rounded-full" />
           <div class="font-medium">{{ user.first_name }} {{ user.last_name }}</div>
         </div>
 
         <div class="flex flex-col space-y-3 p-2">
-          <a href="#" class="transition hover:text-blue-600">Editar Perfil</a>
+          <a href="/Usuario/Actualizar/{{user.id}}" class="transition hover:text-blue-600">Editar Perfil</a>
         </div>
 
         <div class="p-2">
