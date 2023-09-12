@@ -2,6 +2,7 @@ from django.db import connection
 from django.conf import settings
 from django.db.models import Q
 import os
+import re
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
 
@@ -51,7 +52,7 @@ def View_Servicios (request):
 
     if categoria:
         servicio = Servicio.objects.filter(
-            Q(categoria__icontains = categoria)
+            Q(nombre__icontains = categoria)
         ).distinct()
 
     context = {'servicio':servicio,
@@ -62,23 +63,20 @@ def View_Servicios (request):
 def Crear_Servicio (request):
 
     if request.method == 'POST':
-        if request.POST.get('nombre') and request.FILES['foto'] and request.POST.get('descripcion') and request.POST.get('precio') and request.POST.get('categoria') and request.POST.get('estado'):
+        nombre = request.POST.get('nombre')
+        foto = request.FILES['foto']
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        estado = request.POST.get('estado')
+        min_personas = request.POST.get('min_personas')
+        max_personas = request.POST.get('max_personas')
+        dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
 
-            servicio = Servicio()
+        servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,
+                            min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo)
+        servicio.save()
 
-            servicio.nombre = request.POST.get('nombre')
-            img = request.FILES['foto']
-            servicio.foto = img
-            servicio.descripcion = request.POST.get('descripcion')
-            servicio.precio = request.POST.get('precio')
-            servicio.categoria = request.POST.get('categoria')
-            estado = request.POST.get('estado')
-            estado =  True if estado == 'True' else False
-            servicio.estado = estado
-
-            servicio.save()
-
-            return redirect ('/Servicios/Index')
+        return redirect ('/Servicios/Index')
 
     return render (request, 'Servicios/AgregarServicio.html')
 
@@ -239,31 +237,51 @@ def LogoutUser(request):
 
 #region Usuario
 
-def Crear_Usuario (request):
-
+def Crear_Usuario(request):
     if request.method == 'POST':
-        if request.POST.get('password') and request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email') and request.POST.get('confirm_password'):
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         
-            password = request.POST.get('password')
-            confirm_password = request.POST.get('confirm_password')
-
+        if password and confirm_password and email and first_name and last_name:
             if password == confirm_password:
-                Usuario = User.objects.create_user(username = request.POST.get('email'), email=request.POST.get('email'), password=request.POST.get('password'), first_name = request.POST.get('first_name'), last_name = request.POST.get('last_name'))
-                Usuario.save()
-
-                # Iniciar sesión automáticamente en el usuario creado
-                user = authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
-                if user is not None:
-                    login(request, user)
-
-                # Obtener el ID del usuario recién creado
-                id = Usuario.id
-                return redirect(f'/Usuario/Perfil/{id}')
+                # Verificar la longitud de la contraseña
+                if len(password) >= 8:
+                    # Verificar si la contraseña contiene una letra mayúscula y un número utilizando una expresión regular
+                    if re.search(r'^(?=.*[A-Z])(?=.*\d)', password):
+                        # Verificar si el email ya existe en la base de datos
+                        if User.objects.filter(email=email).exists():
+                            return HttpResponse('El email ya está registrado')
+                        
+                        # Verificar si el usuario ya existe en la base de datos
+                        if User.objects.filter(username=email).exists():
+                            return HttpResponse('El usuario ya existe')
+                        
+                        usuario = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
+                        usuario.save()
+                        # Iniciar sesión automáticamente en el usuario creado
+                        user = authenticate(request, username=email, password=password)
+                        if user is not None:
+                            login(request, user)
+                        # Obtener el ID del usuario recién creado
+                        id = usuario.id
+                        return redirect(f'/Usuario/Perfil/{id}')
+                    else:
+                        # La contraseña no contiene una letra mayúscula y un número
+                        return HttpResponse('La contraseña debe contener al menos una letra mayúscula y un número')
+                else:
+                    # La contraseña no tiene al menos 8 caracteres
+                    return HttpResponse('La contraseña debe tener al menos 8 caracteres')
             else:
-                # Las contraseñas no son iguales, puedes mostrar un mensaje de error o realizar alguna otra acción
+                # Las contraseñas no son iguales
                 return HttpResponse('Las contraseñas no coinciden')
+        else:
+            # Faltan campos obligatorios
+            return HttpResponse('Faltan campos obligatorios')
     else:
-        return render (request,'Login/CrearUsuario.html')
+        return render(request, 'Login/CrearUsuario.html')
 
 def Listado_Usuarios (request):
     

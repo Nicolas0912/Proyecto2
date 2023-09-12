@@ -16,8 +16,10 @@ class Servicio(models.Model):
     foto = models.ImageField(upload_to='imagenes_bd/', null=True)
     descripcion = models.CharField(max_length=500, null=True, blank=True)
     precio = models.CharField(max_length=255, null=True, blank=True)
-    categoria = models.CharField(max_length=255, null=True, blank=True)
     estado = models.BooleanField(null=True, blank=True)
+    max_personas = models.IntegerField(null=True, blank=True)
+    min_personas = models.IntegerField(null=True, blank=True)
+    dias_dispo = models.CharField(max_length=255,null=True, blank=True)
 
     class Meta:
         db_table = 'servicios'

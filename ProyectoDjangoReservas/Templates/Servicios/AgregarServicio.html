@@ -15,40 +15,31 @@
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Nombre</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg"
                                     name="nombre"required/>
                             </label>
     
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Foto</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg"
                                     name="foto" type="file" required/>
                             </label>
     
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Descripcion</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                <textarea
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg max-h-32  "
                                      name="descripcion" type="text" required >
-                            </label>
+                                </textarea>
     
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Precio</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg"
                                     name="precio"required type="number"/>
                             </label>
 
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Categoria</span>
-                                <select name="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1">
-                                    <option value="Habitacion">Habitacion</option>
-                                    <option value="Tour">Tour</option>
-                                    <option value="Actividad">Actividad</option>
-                                    <option value="Promocion">Promocion</option>
-                                </select>
-                            </label>
                             <label class="block mt-4 text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Estado</span>
                                 <select name="estado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1">
@@ -56,6 +47,54 @@
                                     <option value="False">Oculto</option>
                                 </select>
                             </label>
+
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Minimo de Personas:</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg"
+                                    name="min_personas"required type="number"/>
+                            </label>
+
+                            <label class="block mt-4 text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Maximo de Personas:</span>
+                                <input
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input rounded-lg"
+                                    name="max_personas"required type="number"/>
+                            </label>
+
+                            <div class="mt-4 text-sm">
+                                <span lass="text-gray-700 dark:text-gray-400">Dias disponible:</span>
+                                <div class="flex justify-evenly mt-2">
+                                    <label class="mr-4">
+                                        Lunes
+                                        <input type="checkbox" name="dias_dispo" value="Lunes" class="mr-2" />
+                                      </label>
+                                      <label class="mr-4">
+                                          Martes
+                                        <input type="checkbox" name="dias_dispo" value="Martes" class="mr-2" />
+                                      </label>
+                                      <label class="mr-4">
+                                        Miercoles
+                                      <input type="checkbox" name="dias_dispo" value="Miercoles" class="mr-2" />
+                                    </label>
+                                    <label class="mr-4">
+                                        Jueves
+                                      <input type="checkbox" name="dias_dispo" value="Jueves" class="mr-2" />
+                                    </label>
+                                    <label class="mr-4">
+                                        Viernes
+                                      <input type="checkbox" name="dias_dispo" value="Viernes" class="mr-2" />
+                                    </label>
+                                    <label class="mr-4">
+                                        Sabado
+                                      <input type="checkbox" name="dias_dispo" value="Sabado" class="mr-2" />
+                                    </label>
+                                    <label class="mr-4">
+                                        Domingo
+                                      <input type="checkbox" name="dias_dispo" value="Domingo" class="mr-2" />
+                                    </label>
+                                </div>
+                            </div>
     
     
                             <!-- You should use a button here, as the anchor is only used for the example  -->
