@@ -1,12 +1,10 @@
 from django.db import connection
 from django.conf import settings
 from django.db.models import Q
-import os
-import re
+import os, re
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
 from django.core.files import File
-
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.template import Template,Context
@@ -14,7 +12,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-
 from ProyectoDjangoReservas.models import Servicio, Galeria, Reserva, Restaurante, Profile
 
 #region Inicio
@@ -24,7 +21,6 @@ def View_Inicio (request):
     return render (request,'Index/Home.html')
 
 #endregion
-
 
 #region Servicios
 
@@ -44,22 +40,24 @@ def servicios_ocultos(request):
 
     return render(request, 'Servicios/ServiciosOcultos.html', {'servicio': servicios_ocultos})
 
-def View_Servicios (request):
 
+def View_Servicios(request):
     categoria = request.GET.get('categoria')
     servicio = Servicio.objects.all()
-
     cantidad_servicios = Servicio.objects.count()
-
+    
     if categoria:
         servicio = Servicio.objects.filter(
-            Q(nombre__icontains = categoria)
+            Q(nombre__icontains=categoria)
         ).distinct()
+    
 
-    context = {'servicio':servicio,
-               'cantidad_servicios': cantidad_servicios}
-
-    return render (request,'Servicios/Index.html', context)
+    context = {
+        'servicio': servicio,
+        'cantidad_servicios': cantidad_servicios
+    }
+    
+    return render(request, 'Servicios/Index.html', context)
 
 def Crear_Servicio (request):
 
@@ -294,7 +292,6 @@ def Crear_Usuario(request):
         return render(request, 'Login/CrearUsuario.html')
 
 def Listado_Usuarios (request):
-    
     busqueda = request.GET.get('buscar')
     usuario = User.objects.all()
     profile = Profile.objects.all()
@@ -488,7 +485,6 @@ def Reservas_Usuario (request):
 
     return render(request,'Reservas/ReservasUsuario.html',context)
 #endregion
-
 
 # region restaurantes
 
