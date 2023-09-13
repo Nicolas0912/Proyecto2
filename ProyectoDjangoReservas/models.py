@@ -2,6 +2,7 @@ from django.db import connection, models
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
+    id = models.CharField(max_length=11,primary_key=True)
     telefono = models.CharField(max_length=25, null=True)
     documento = models.CharField(max_length=25, null=True)
     profile_img = models.ImageField(upload_to='profile_bd/', null=True)

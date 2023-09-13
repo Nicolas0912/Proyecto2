@@ -5,6 +5,7 @@ import os
 import re
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
+from django.core.files import File
 
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -216,16 +217,16 @@ def Eliminar_imagen (request,id):
 
 #region Login
 
-def View_Login (request):
+def View_Login(request):
     if request.method == "POST":
         if request.POST.get('username') and request.POST.get('password'):
-            user = authenticate(username = request.POST.get('username'), password = request.POST.get('password'))
+            user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
                 login(request, user)
                 return redirect("/Index/Home")
             else:
-                mensaje = "Correo o Contraseña Incorrecto"
-        return render(request, 'Login/Login.html', {'mensaje': mensaje})
+                messages.error(request, 'Credenciales de inicio de sesión incorrectas')
+                return redirect('/Login/IniciarSesion')
     else:
         return render(request, 'Login/Login.html')
     
@@ -253,14 +254,19 @@ def Crear_Usuario(request):
                     if re.search(r'^(?=.*[A-Z])(?=.*\d)', password):
                         # Verificar si el email ya existe en la base de datos
                         if User.objects.filter(email=email).exists():
-                            return HttpResponse('El email ya está registrado')
-                        
+                            messages.error(request, 'El email ya está registrado')
+                            return redirect('/Login/CrearUser')
                         # Verificar si el usuario ya existe en la base de datos
                         if User.objects.filter(username=email).exists():
-                            return HttpResponse('El usuario ya existe')
-                        
+                            messages.error(request, 'El usuario ya existe')
+                            return redirect('/Login/CrearUser')
                         usuario = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
                         usuario.save()
+                        # Crear Perfil Predeterminado
+                        # Obtener el ID del usuario recién creado
+                        id = usuario.id
+                        profile = Profile.objects.create(id=id, auth_user_id=id)
+                        profile.save()
                         # Iniciar sesión automáticamente en el usuario creado
                         user = authenticate(request, username=email, password=password)
                         if user is not None:
@@ -270,16 +276,20 @@ def Crear_Usuario(request):
                         return redirect(f'/Usuario/Perfil/{id}')
                     else:
                         # La contraseña no contiene una letra mayúscula y un número
-                        return HttpResponse('La contraseña debe contener al menos una letra mayúscula y un número')
+                        messages.error(request, 'La contraseña debe contener al menos una letra mayúscula y un número')
+                        return redirect('/Login/CrearUser')
                 else:
                     # La contraseña no tiene al menos 8 caracteres
-                    return HttpResponse('La contraseña debe tener al menos 8 caracteres')
+                    messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
+                    return redirect('/Login/CrearUser')
             else:
                 # Las contraseñas no son iguales
-                return HttpResponse('Las contraseñas no coinciden')
+                messages.error(request, 'Las contraseñas no coinciden')
+                return redirect('/Login/CrearUser')
         else:
             # Faltan campos obligatorios
-            return HttpResponse('Faltan campos obligatorios')
+            messages.error(request, 'Faltan campos obligatorios')
+            return redirect('/Login/CrearUser')
     else:
         return render(request, 'Login/CrearUsuario.html')
 
@@ -313,12 +323,25 @@ def Actualizar_Usuarios(request, id):
         perfil_img = request.FILES.get('profile_img')
         telefono = request.POST.get('telefono')
         documento = request.POST.get('documento')
+
+        # Verificar el formato de la imagen
+        if perfil_img.name.split(".")[-1].lower() not in ['jpeg', 'jpg', 'png']:
+            messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
+            return redirect(f'/Usuario/Actualizar/{id}')
         
         if perfil_img and telefono and documento:
             perfil = Profile.objects.get(id=id)
-            ruta_foto = "media/" + str(perfil.profile_img)
-            os.remove(ruta_foto)
+
+            # Verificar si la imagen existe
+            if perfil.profile_img:
+                ruta_foto = "media/" + str(perfil.profile_img)
+                
+                # Eliminar la imagen existente
+                if os.path.exists(ruta_foto):
+                    os.remove(ruta_foto)
+
             perfil.profile_img = perfil_img
+            perfil.profile_img.name = f'Profile_img_{id}.{perfil.profile_img.name.split(".")[-1]}'
             perfil.telefono = telefono
             perfil.documento = documento
             perfil.save()
@@ -346,11 +369,18 @@ def Perfil_Usuarios (request,id):
         telefono = request.POST.get('telefono')
         documento = request.POST.get('documento')
         profile_img = request.FILES['profile_img']
+
+        # Verificar el formato de la imagen
+        if profile_img.name.split(".")[-1].lower() not in ['jpeg', 'jpg', 'png']:
+            messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
+            return redirect(f'/Usuario/Perfil/{id}')
             
         # Obtener el usuario actual
         usuario = request.user
-
         id = usuario.id
+
+        # Generar un nombre de archivo único para la imagen
+        profile_img.name = f'Profile_img_{id}.{profile_img.name.split(".")[-1]}'
 
         # Crear un nuevo objeto Profile con los datos del formulario
         profile = Profile(id=id, telefono=telefono, documento=documento, profile_img=profile_img, auth_user=usuario)
