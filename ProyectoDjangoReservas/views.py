@@ -12,7 +12,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from ProyectoDjangoReservas.models import Servicio, Galeria, Reserva, Restaurante, Profile
+from django.contrib.auth.decorators import login_required
+from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile
 
 #region Inicio
 
@@ -38,19 +39,25 @@ def servicios_ocultos(request):
     
     servicios_ocultos = Servicio.objects.filter(estado=False)
 
-    return render(request, 'Servicios/ServiciosOcultos.html', {'servicio': servicios_ocultos})
+        # Separar los elementos de la cadena dias_dispo en una lista
+    for c in servicios_ocultos:
+        c.dias_dispo = c.dias_dispo.split("-")
 
+    return render(request, 'Servicios/ServiciosOcultos.html', {'servicio': servicios_ocultos})
 
 def View_Servicios(request):
     categoria = request.GET.get('categoria')
     servicio = Servicio.objects.all()
     cantidad_servicios = Servicio.objects.count()
-    
+
     if categoria:
         servicio = Servicio.objects.filter(
-            Q(nombre__icontains=categoria)
+            Q(categoria__icontains=categoria)
         ).distinct()
     
+    # Separar los elementos de la cadena dias_dispo en una lista
+    for c in servicio:
+        c.dias_dispo = c.dias_dispo.split("-")
 
     context = {
         'servicio': servicio,
@@ -69,16 +76,17 @@ def Crear_Servicio (request):
         estado = request.POST.get('estado')
         min_personas = request.POST.get('min_personas')
         max_personas = request.POST.get('max_personas')
+        categoria = request.POST.get('categoria')
         dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
 
         servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,
-                            min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo)
+                            min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
         servicio.save()
 
         return redirect ('/Servicios/Index')
 
     return render (request, 'Servicios/AgregarServicio.html')
-
+ 
 def Listado_Servicios (request):
 
     busqueda = request.GET.get('buscar')
@@ -90,6 +98,10 @@ def Listado_Servicios (request):
             Q(categoria__icontains = busqueda) | 
             Q(precio__icontains = busqueda)
         ).distinct()
+
+    # Separar los elementos de la cadena dias_dispo en una lista
+    for c in servicio:
+        c.dias_dispo = c.dias_dispo.split("-")
 
     paginador = Paginator(servicio,5)
     pagina = request.GET.get('page') or 1
@@ -106,7 +118,7 @@ def Listado_Servicios (request):
 def Actualizar_Servicios (request, id):
 
     if request.method == 'POST':
-        if request.POST.get('nombre') and request.FILES['foto'] and request.POST.get('descripcion') and request.POST.get('precio') and request.POST.get('categoria') and request.POST.get('estado'):
+        if request.POST.get('nombre') and request.FILES['foto'] and request.POST.get('descripcion') and request.POST.get('precio') and request.POST.get('categoria') and request.POST.get('estado') and request.POST.get('min_personas') and request.POST.get('max_personas') and request.POST.get('dias_dispo'):
         
             servicio = Servicio.objects.get(id=id)
 
@@ -123,6 +135,10 @@ def Actualizar_Servicios (request, id):
             estado = request.POST.get('estado')
             estado =  True if estado == 'True' else False
             servicio.estado = estado
+            dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
+            servicio.dias_dispo = dias_dispo
+            servicio.max_personas = request.POST.get('max_personas')
+            servicio.min_personas = request.POST.get('min_personas')
 
 
             servicio.save()
@@ -260,7 +276,6 @@ def Crear_Usuario(request):
                             return redirect('/Login/CrearUser')
                         usuario = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
                         usuario.save()
-                        # Crear Perfil Predeterminado
                         # Obtener el ID del usuario recién creado
                         id = usuario.id
                         profile = Profile.objects.create(id=id, auth_user_id=id)

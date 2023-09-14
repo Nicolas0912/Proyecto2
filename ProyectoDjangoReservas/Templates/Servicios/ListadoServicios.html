@@ -40,6 +40,12 @@
                                     <div class="font-semibold text-center">Estado</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Dias Disponible</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Capacidad</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-center">Acciones</div>
                                 </th>
                             </tr>
@@ -75,6 +81,12 @@
                                     {% else %}
                                     <div class="text-left font-medium text-red-500">{{ c.estado }}</div>
                                     {% endif %}
+                                </td>
+                                <td class="p-2 whitespace-wrap">
+                                    {{ c.dias_dispo }}
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <span class="font-semibold text-center">Min: {{ c.min_personas }} - Max: {{ c.max_personas }}</span>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="px-5 py-3 text-center">

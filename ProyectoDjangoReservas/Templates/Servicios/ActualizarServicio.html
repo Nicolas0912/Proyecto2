@@ -14,51 +14,116 @@
                             {% csrf_token %}
                             {% for c in servicio %}
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Nombre</span>
+                                <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre:</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    name="nombre"required value="{{ c.nombre }}"/>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="nombre" placeholder="Nombre del Servicio" value="{{ c.nombre }}" required/>
                             </label>
-    
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Foto</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    name="foto" type="file" required/>
+
+                            <div class="grid grid-cols-2 gap-5">
+                                <label class="block pt-2">
+                                    <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Foto del Servicio:</span>
+                                    <input type="file" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-400 file:text-zinc-900 hover:file:bg-blue-300 pt-2" name="foto" required onchange="previewImage(event)"/>
+                                  </label>
+
+                                  <img id="preview-image" class="max-h-40 max-w-40 rounded-lg" alt="Vista previa de la imagen" style="display: none;">
+                            </div>
+
+                            <div>
+                                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion:</label>
+                                <textarea id="message" rows="4" class="block p-2.5 w-full max-h-40 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="descripcion" placeholder="{{ c.descripcion }}"></textarea>
+                            </div>
+
+
                             </label>
-    
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Descripcion</span>
+                                <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio:</span>
                                 <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                     name="descripcion" required value="{{ c.descripcion }}">
-                            </label>
-    
-                            <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Precio</span>
-                                <input
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    name="precio"required type="number" value="{{ c.precio }}"/>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="precio"required placeholder="Precio del Servicio" value="{{ c.precio }}" type="number"/>
                             </label>
 
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Categoria</span>
-                                <select name="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1">
-                                    <option value="Habitacion">Habitacion</option>
+                                <span class=" text-sm font-medium text-gray-900 dark:text-white">Estado</span>
+                                <select name="estado" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                    <option value="True">Visible</option>
+                                    <option value="False">Oculto</option>
+                                </select>
+                            </label>
+
+                            <label class="block mt-4 text-sm">
+                                <span class=" text-sm font-medium text-gray-900 dark:text-white">Categoria</span>
+                                <select name="categoria" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                                     <option value="Tour">Tour</option>
                                     <option value="Actividad">Actividad</option>
                                     <option value="Promocion">Promocion</option>
                                 </select>
                             </label>
+
                             <label class="block mt-4 text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Estado</span>
-                                <select name="estado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1">
-                                    <option value="True">Visible</option>
-                                    <option value="False">Oculto</option>
-                                </select>
+                                <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Minimo de Personas:</span>
+                                <input
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="min_personas"required value="{{ c.min_personas }}" type="number"/>
                             </label>
-    
-    
+
+                            <label class="block mt-4 text-sm">
+                                <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Maximo de Personas:</span>
+                                <input
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="max_personas"required value="{{ c.max_personas }}"  type="number"/>
+                            </label>
+
+                            <div class="mt-4">
+                             <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Dias Disponible</h3>
+                            <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+                                 <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                    <div class="flex items-center pl-3">
+                                        <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Lunes" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                        <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Lunes</label>
+                                    </div>
+                                </li>
+                                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                   <div class="flex items-center pl-3">
+                                       <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Martes" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                       <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Martes</label>
+                                   </div>
+                               </li>
+                               <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                  <div class="flex items-center pl-3">
+                                      <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Miercoles" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                      <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Miercoles</label>
+                                  </div>
+                              </li>
+                              <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                 <div class="flex items-center pl-3">
+                                     <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Jueves" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                     <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Jueves</label>
+                                 </div>
+                             </li>
+                             <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                <div class="flex items-center pl-3">
+                                    <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Viernes" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Viernes</label>
+                                </div>
+                            </li>
+                            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                               <div class="flex items-center pl-3">
+                                   <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Sabado" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                   <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sabado</label>
+                               </div>
+                           </li>
+                           <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                              <div class="flex items-center pl-3">
+                                  <input id="vue-checkbox-list" type="checkbox" name="dias_dispo" value="Domingo" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                  <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Domingo</label>
+                              </div>
+                          </li>
+                            </ul>
+
+                            </div>
+
                             <!-- You should use a button here, as the anchor is only used for the example  -->
                             <input class="block w-full px-4 py-2 mt-8 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-700 hover:bg-blue-800 focus:outline-none focus:shadow-outline-blue"
                                 type="submit" value="Actualizar Servicio">
