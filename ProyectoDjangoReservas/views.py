@@ -79,8 +79,27 @@ def Crear_Servicio (request):
         categoria = request.POST.get('categoria')
         dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
 
+        # Verificar la extensión del archivo de imagen
+        img = request.FILES['foto']
+        ext = img.name.split('.')[-1].lower()
+        if ext not in ['jpg', 'jpeg', 'png']:
+            messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
+            return redirect(f'/Servicio/Agregar')
+        
+        # Verificar la longitud de la descripción
+        descripcion = request.POST.get('descripcion')
+        if len(descripcion) > 500:
+            messages.error(request, 'La descripción no puede superar los 500 caracteres.')
+            return redirect(f'/Servicio/Agregar')
+        
+
         servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,
                             min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
+        
+        # Asignar el nombre único a la imagen
+        foto.name = f'S_Img_{nombre}.{ext}'
+        servicio.foto = foto
+
         servicio.save()
 
         return redirect ('/Servicios/Index')
@@ -115,39 +134,71 @@ def Listado_Servicios (request):
 
     return render(request,'Servicios/ListadoServicios.html',context)
 
-def Actualizar_Servicios (request, id):
-
+def Actualizar_Servicios(request, id):
     if request.method == 'POST':
-        if request.POST.get('nombre') and request.FILES['foto'] and request.POST.get('descripcion') and request.POST.get('precio') and request.POST.get('categoria') and request.POST.get('estado') and request.POST.get('min_personas') and request.POST.get('max_personas') and request.POST.get('dias_dispo'):
-        
+        if (
+            request.POST.get('nombre')
+            and request.FILES.get('foto')
+            and request.POST.get('descripcion')
+            and request.POST.get('precio')
+            and request.POST.get('categoria')
+            and request.POST.get('estado')
+            and request.POST.get('min_personas')
+            and request.POST.get('max_personas')
+            and request.POST.get('dias_dispo')
+        ):
             servicio = Servicio.objects.get(id=id)
-
-            ruta_foto = "media/"+str(servicio.foto)
-
-            os.remove(ruta_foto)
-
-            servicio.nombre = request.POST.get('nombre')
+            
+            # Verificar si la foto existe
+            if servicio.foto:
+                ruta_foto = "media/" + str(servicio.foto)
+                
+                # Eliminar la foto existente
+                if os.path.exists(ruta_foto):
+                    os.remove(ruta_foto)
+            
+            # Verificar la extensión del archivo de imagen
             img = request.FILES['foto']
+            ext = img.name.split('.')[-1].lower()
+            if ext not in ['jpg', 'jpeg', 'png']:
+                messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+            
+            # Verificar la longitud de la descripción
+            descripcion = request.POST.get('descripcion')
+            if len(descripcion) > 500:
+                messages.error(request, 'La descripción no puede superar los 500 caracteres.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+            
+            # Continuar con el procesamiento si la extensión y la longitud de la descripción son válidas
+            servicio.nombre = request.POST.get('nombre')
+            
+            # Asignar el nombre único a la imagen
+            img.name = f'Service_img_{id}.{ext}'
             servicio.foto = img
-            servicio.descripcion = request.POST.get('descripcion')
+            
+            servicio.descripcion = descripcion
             servicio.precio = request.POST.get('precio')
             servicio.categoria = request.POST.get('categoria')
             estado = request.POST.get('estado')
-            estado =  True if estado == 'True' else False
+            estado = True if estado == 'True' else False
             servicio.estado = estado
+            
             dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
             servicio.dias_dispo = dias_dispo
             servicio.max_personas = request.POST.get('max_personas')
             servicio.min_personas = request.POST.get('min_personas')
-
-
+            
             servicio.save()
-
-            return redirect ('/Servicios/Index')
+            
+            return redirect('/Servicios/Index')
+        else:
+            messages.error(request, 'Por favor, complete todos los campos.')
+            return redirect(f'/Servicio/Actualizar/{id}')
     else:
         servicio = Servicio.objects.filter(id=id)
-        return render (request, 'Servicios/ActualizarServicio.html', {'servicio':servicio})
-
+        return render(request, 'Servicios/ActualizarServicio.html', {'servicio': servicio})
+    
 def Eliminar_Servicio (request, id):
 
     servicio = Servicio.objects.get(id=id)
