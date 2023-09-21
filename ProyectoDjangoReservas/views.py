@@ -66,8 +66,7 @@ def View_Servicios(request):
     
     return render(request, 'Servicios/Index.html', context)
 
-def Crear_Servicio (request):
-
+def Crear_Servicio(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
         foto = request.FILES['foto']
@@ -78,28 +77,55 @@ def Crear_Servicio (request):
         max_personas = request.POST.get('max_personas')
         categoria = request.POST.get('categoria')
         dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
-
+        
+        # Verificar que los campos no estén vacíos
+        if not nombre or not foto or not descripcion or not precio or not estado or not min_personas or not max_personas or not categoria or not dias_dispo:
+            messages.error(request, 'Por favor, complete todos los campos.')
+            return redirect('/Servicio/Agregar')
+        
         # Verificar la extensión del archivo de imagen
-        img = request.FILES['foto']
-        ext = img.name.split('.')[-1].lower()
+        ext = foto.name.split('.')[-1].lower()
         if ext not in ['jpg', 'jpeg', 'png']:
             messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
-            return redirect(f'/Servicio/Agregar')
+            return redirect('/Servicio/Agregar')
+        
+        # Verificar el tamaño de la imagen
+        if foto.size > 400000:
+            messages.error(request, 'El tamaño de la imagen no puede ser mayor a 400 KB.')
+            return redirect('/Servicio/Agregar')
         
         # Verificar la longitud de la descripción
-        descripcion = request.POST.get('descripcion')
         if len(descripcion) > 500:
             messages.error(request, 'La descripción no puede superar los 500 caracteres.')
-            return redirect(f'/Servicio/Agregar')
+            return redirect('/Servicio/Agregar')
         
-
-        servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,
-                            min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
+        # Verificar que el precio no sea un número negativo
+        if float(precio) < 0:
+            messages.error(request, 'El precio no puede ser un número negativo.')
+            return redirect('/Servicio/Agregar')
+        
+        # Verificar que el número mínimo no sea negativo
+        if int(min_personas) < 0:
+            messages.error(request, 'El número mínimo de personas no puede ser negativo.')
+            return redirect('/Servicio/Agregar')
+        
+        # Verificar que el número máximo no sea negativo
+        if int(max_personas) < 0:
+            messages.error(request, 'El número máximo de personas no puede ser negativo.')
+            return redirect('/Servicio/Agregar')
+        
+        # Verificar que el número mínimo no sea mayor que el número máximo
+        if int(min_personas) > int(max_personas):
+            messages.error(request, 'El número mínimo de personas no puede ser mayor que el número máximo de personas.')
+            return redirect('/Servicio/Agregar')
+        
+        # Crear el objeto Servicio
+        servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado, min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
         
         # Asignar el nombre único a la imagen
-        foto.name = f'S_Img_{nombre}.{ext}'
-        servicio.foto = foto
-
+        servicio.foto.name = f'S_Img_{nombre}.{ext}'
+        
+        # Guardar el objeto Servicio
         servicio.save()
 
         return redirect ('/Servicios/Index')
@@ -138,7 +164,7 @@ def Actualizar_Servicios(request, id):
     if request.method == 'POST':
         if (
             request.POST.get('nombre')
-            and request.FILES.get('foto')
+            and request.FILES['foto']
             and request.POST.get('descripcion')
             and request.POST.get('precio')
             and request.POST.get('categoria')
