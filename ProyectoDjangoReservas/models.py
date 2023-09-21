@@ -25,18 +25,6 @@ class Servicio(models.Model):
 
     class Meta:
         db_table = 'servicios'
-
-class Reserva(models.Model):
-    id = models.AutoField(primary_key=True)
-    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
-    fecha_inicio = models.DateField('Fecha de inicio', auto_now=False, auto_now_add=False)
-    fecha_final = models.DateField('Fecha de fin', auto_now=False, auto_now_add=False)
-    estado = models.BooleanField()
-    telefono = models.CharField(max_length=25, null=True, default=None)
-    documento = models.CharField(max_length=255, null=True, blank=True)
-
-    class Meta:
-        db_table = 'reserva'
         
 class Galeria(models.Model):
     id = models.AutoField(primary_key=True)

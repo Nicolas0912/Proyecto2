@@ -189,6 +189,11 @@ def Actualizar_Servicios(request, id):
             if ext not in ['jpg', 'jpeg', 'png']:
                 messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
                 return redirect(f'/Servicio/Actualizar/{id}')
+
+            # Verificar el tamaño de la imagen
+            if img.size > 400000:
+                messages.error(request, 'El tamaño de la imagen no puede ser mayor a 400 KB.')
+                return redirect(f'/Servicio/Actualizar/{id}')
             
             # Verificar la longitud de la descripción
             descripcion = request.POST.get('descripcion')
@@ -196,20 +201,40 @@ def Actualizar_Servicios(request, id):
                 messages.error(request, 'La descripción no puede superar los 500 caracteres.')
                 return redirect(f'/Servicio/Actualizar/{id}')
             
+            # Verificar que el precio no sea un número negativo
+            precio = request.POST.get('precio')
+            if float(precio) < 0:
+                messages.error(request, 'El precio no puede ser un número negativo.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+        
+            # Verificar que el número mínimo no sea negativo
+            min_personas = request.POST.get('min_personas')
+            if int(min_personas) < 0:
+                messages.error(request, 'El número mínimo de personas no puede ser negativo.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+        
+            # Verificar que el número máximo no sea negativo
+            max_personas = request.POST.get('max_personas')
+            if int(max_personas) < 0:
+                messages.error(request, 'El número máximo de personas no puede ser negativo.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+        
+            # Verificar que el número mínimo no sea mayor que el número máximo
+            if int(min_personas) > int(max_personas):
+                messages.error(request, 'El número mínimo de personas no puede ser mayor que el número máximo de personas.')
+                return redirect(f'/Servicio/Actualizar/{id}')
+            
             # Continuar con el procesamiento si la extensión y la longitud de la descripción son válidas
             servicio.nombre = request.POST.get('nombre')
-            
             # Asignar el nombre único a la imagen
             img.name = f'Service_img_{id}.{ext}'
             servicio.foto = img
-            
             servicio.descripcion = descripcion
             servicio.precio = request.POST.get('precio')
             servicio.categoria = request.POST.get('categoria')
             estado = request.POST.get('estado')
             estado = True if estado == 'True' else False
             servicio.estado = estado
-            
             dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
             servicio.dias_dispo = dias_dispo
             servicio.max_personas = request.POST.get('max_personas')
@@ -629,4 +654,8 @@ def Listado_Restaurantes (request):
     context = { 'restaurantes':restaurante,'current_page':current_page,'paginas':paginas}
     
     return render(request,'Restaurantes/ListadoRestaurantes.html',context)
+#endregion
+
+#region Habitaciones
+
 #endregion
