@@ -658,4 +658,12 @@ def Listado_Restaurantes (request):
 
 #region Habitaciones
 
+def View_Habitaciones (request):
+
+    return render (request, 'Habitaciones/Index.html')
+
+def Agregar_Habitacion (request):
+
+    return render (request, 'Habitaciones/AgregarHabitacion.html')
+
 #endregion

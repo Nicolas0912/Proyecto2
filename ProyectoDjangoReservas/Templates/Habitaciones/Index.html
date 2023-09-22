@@ -4,20 +4,16 @@
     <div class="container px-6 py-8 mx-auto">
         <div class="lg:flex lg:-mx-2">
 			<div class="space-y-3 lg:w-1/5 lg:px-2 lg:space-y-4">
-				<form action="" method="get" class="space-y-3 lg:w-1/5 lg:px-2 lg:space-y-4">
-				<a class="block font-medium text-gray-500 dark:text-gray-300 hover:underline" href="/Habitaciones/Index">Habitaciones</a>
-                <button class="block font-medium text-gray-500 dark:text-gray-300 hover:underline" name="categoria" value="Tour" type="submit">Tours</button>
-				<button class="block font-medium text-gray-500 dark:text-gray-300 hover:underline" name="categoria" value="Actividad" type="submit">Actividades</button>
-                <button class="block font-medium text-blue-600 dark:text-blue-500 hover:underline" name="categoria" value="Promocion" type="submit">Promociones</button>
-				</form>
+                <a class="block font-medium text-gray-500 dark:text-gray-300 hover:underline" href="/Habitaciones/Index">Habitaciones</a>
+                <a class="block font-medium text-gray-500 dark:text-gray-300 hover:underline" href="/Servicios/Index">Servicios</a>
             </div>
             <div class="mt-6 lg:mt-0 lg:px-2 lg:w-4/5 ">
                 <div class="flex items-center justify-between text-sm tracking-widest uppercase ">
-                    <a href="/Servicios/Index" class="text-gray-500 dark:text-gray-300">SERVICIOS {{ cantidad_servicios }}</a>
+                    <a href="/Servicios/Index" class="text-gray-500 dark:text-gray-300">Habitaciones {{ cantidad_servicios }}</a>
                     <div class="flex items-center">
 
 						{% if user.is_superuser == 1 %}
-                        <a href="/Servicio/Agregar" class="text-sm bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Agregar</a>
+                        <a href="/Habitacion/Agregar" class="text-sm bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Agregar</a>
 						<a href="{% url '/Servicios/Ocultos' %}" class="text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded ml-2">Ocultos</a>
 						{% endif %}
                     </div>

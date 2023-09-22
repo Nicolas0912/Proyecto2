@@ -44,3 +44,28 @@ class Restaurante(models.Model):
     
     class Meta:
         db_table = 'restaurante'
+
+class Habitacion(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name='ID')
+    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    foto = models.CharField(max_length=255, verbose_name='Foto')
+    descripcion = models.CharField(max_length=500, verbose_name='Descripción')
+    precio = models.IntegerField(verbose_name='Precio')
+    estado = models.BooleanField(verbose_name='Estado')
+    tipo_habitacion = models.ForeignKey('TipoHabitacion', on_delete=models.CASCADE, verbose_name='Tipo de Habitación')
+
+    class Meta:
+        db_table = 'habitacion'
+        verbose_name = 'Habitación'
+        verbose_name_plural = 'Habitaciones'
+
+class TipoHabitacion(models.Model):
+    id = models.AutoField(primary_key=True, verbose_name='ID')
+    tipo = models.CharField(max_length=45)
+    camas = models.CharField(max_length=25)
+    banios = models.CharField(max_length=45)
+
+    class Meta:
+        db_table = 'tipo_habitacion'
+        verbose_name = 'Tipo de Habitación'
+        verbose_name_plural = 'Tipos de Habitaciones'
