@@ -1,0 +1,63 @@
+{% include "Inc/Header.html" %}
+
+<div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+    <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+
+            <div class="flex items-center justify-center p-6 sm:p-12">
+
+                <div class="w-full">
+
+                    <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                        Agregar Tipo de Habitacion
+                    </h1>
+                    <form class="space-y-4 md:space-y-6" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if messages %}
+                        <!-- This is an example component -->
+                        <div class="messages mt-4 container" id="alertbox">
+                            <div class="container bg-red-500 flex items-center text-white text-sm font-bold px-4 py-3 relative rounded-lg" role="alert">
+                                {% for message in messages %}
+                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                {% endfor %}
+                                <span class="absolute top-0 bottom-0 right-0 px-4 py-3 closealertbutton">
+                                    <svg class="fill-current h-6 w-6 text-white" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <title>Close</title>
+                                        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <label class="block mt-4 text-sm">
+                            <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo Acomodacion:</span>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="tipo" placeholder="Acomodacion de la Habitacion"/>
+                        </label>
+                    
+                        <label class="block mt-4 text-sm">
+                            <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de Camas:</span>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="camas" placeholder="Camas Disponibles"/>
+                        </label>
+                    
+                        <label class="block mt-4 text-sm">
+                            <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de Baños:</span>
+                            <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="banios" placeholder="Baños Disponibles"/>
+                        </label>
+                    
+                        <!-- You should use a button here, as the anchor is only used for the example  -->
+                        <input class="block w-full px-4 py-2 mt-8 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-700 hover:bg-blue-800 focus:outline-none focus:shadow-outline-blue"
+                            type="submit" value="Agregar Tipo">
+                        </input>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+{% include "Inc/Footer.html" %}
+

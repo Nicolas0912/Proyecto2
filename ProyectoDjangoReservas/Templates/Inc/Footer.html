@@ -38,39 +38,81 @@
     </script>
 
 <script>
-  const modal = document.querySelector('.main-modal');
-  const closeButton = document.querySelectorAll('.modal-close');
+  const modal = (el) => {
+    const toggle = (wrapperEl, mainEl) => {
+      document.querySelector('body').classList.toggle('overflow-y-hidden');
+      wrapperEl.classList.toggle('opacity-100');
+      wrapperEl.classList.toggle('opacity-0');
+      wrapperEl.classList.toggle('visible');
+      wrapperEl.classList.toggle('invisible');
+      mainEl.classList.toggle('-translate-y-full');
+      mainEl.classList.toggle('translate-y-0')
+    };
 
-  const modalClose = () => {
-    modal.classList.remove('fadeIn');
-    modal.classList.add('fadeOut');
-    setTimeout(() => {
-      modal.style.display = 'none';
-    }, 500);
-  }
+    const extractElements = (target) => {
+      const wrapper = document.querySelector(`[data-modal='${target}']`);
+      const modal = wrapper.querySelector('[data-modal-main]');
+      return { wrapper, modal };
+    };
 
-  const openModal = () => {
-    modal.classList.remove('fadeOut');
-    modal.classList.add('fadeIn');
-    modal.style.display = 'flex';
-  }
+    const showEvent = new CustomEvent('show', {
+      detail: {},
+      bubbles: true,
+      cancelable: true,
+      composed: false,
+    });
 
-  for (let i = 0; i < closeButton.length; i++) {
+    const hideEvent = new CustomEvent('hide', {
+      detail: {},
+      bubbles: true,
+      cancelable: true,
+      composed: false,
+    });
 
-    const elements = closeButton[i];
-
-    elements.onclick = (e) => modalClose();
-
-    modal.style.display = 'none';
-
-    window.onclick = function (event) {
-      if (event.target == modal) modalClose();
+    if (!document.querySelector('[data-modal-toggle]')) {
+      return;
     }
-  }
+
+    if (!document.querySelector('[data-modal')) {
+      return;
+    }
+
+    [...document.querySelectorAll('[data-modal-toggle]')].forEach((btn) =>
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const action = btn.getAttribute('data-modal-action');
+        const target = btn.getAttribute('data-modal-toggle');
+        const { wrapper, modal } = extractElements(target);
+
+        if (action === 'open') {
+          modal.dispatchEvent(showEvent);
+        }
+        if (action === 'close') {
+          modal.dispatchEvent(hideEvent);
+        }
+        toggle(wrapper, modal);
+      })
+    );
+  };
+
+  // init
+  modal();
+
+  // Custom event listeners
+
+  // This event fires immediately before the modal is start showing
+  document.querySelector('[data-modal="example"]').addEventListener('show', (event) => {
+    const sayHi = ['Hola', 'Zdravstvuyte', 'Salve', 'Konnichiwa', 'Guten Tag', 'Olá'];
+    const randomNum = Math.floor(Math.random() * sayHi.length); 
+    document.querySelector('#exampleHeader').innerText = sayHi[randomNum];
+    console.log('show');
+  });
+
+  // This event is fired immediately before modal is start hidding
+  document.querySelector('[data-modal="example"]').addEventListener('hide', (event) => {
+    console.log('hide');
+  });
 </script>
-
-
-
   
     
 </body>

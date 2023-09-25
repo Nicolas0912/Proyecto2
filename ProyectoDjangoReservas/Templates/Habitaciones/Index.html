@@ -22,7 +22,7 @@
 				<div class="grid grid-cols-3 gap-10 content-start pt-10">
 					<!-- This is an example component -->
 
-				{% for c in servicio %}
+				{% for c in habitacion %}
 				<div class="w-full  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
 					<div class="flex items-center justify-between p-2">
@@ -64,16 +64,8 @@
 							</svg>
 							<span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
 						</div>
-						<div class="mt-2.5 mb-5">
-							<span class="block mb-2 text-m font-semibold text-gray-900 dark:text-white">Disponibilidad:</span>
-							<ul class="grid grid-cols-4">
-								{% for dia in c.dias_dispo %}
-								<li class="bg-blue-100 text-center text-gray-800 text-xs font-semibold mb-2 mr-2 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{{ dia }}</li>
-								{% endfor %}
-							</ul>
-						</div>
 
-						<span class="block mb-2 text-m font-semibold text-gray-900 dark:text-white">Capacidad:</span>
+						<span class="block mb-2 text-m font-semibold text-gray-900 dark:text-white">Tipo:</span>
 						<div class="flex items-center mt-2.5 mb-5">
 							<i class='bx bxs-user'></i>
 							<span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-1">Min: {{  c.min_personas }}</span>

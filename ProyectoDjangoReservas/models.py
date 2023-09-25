@@ -48,7 +48,7 @@ class Restaurante(models.Model):
 class Habitacion(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='ID')
     nombre = models.CharField(max_length=255, verbose_name='Nombre')
-    foto = models.CharField(max_length=255, verbose_name='Foto')
+    foto = models.ImageField(upload_to='habitaciones_bd/')
     descripcion = models.CharField(max_length=500, verbose_name='Descripción')
     precio = models.IntegerField(verbose_name='Precio')
     estado = models.BooleanField(verbose_name='Estado')

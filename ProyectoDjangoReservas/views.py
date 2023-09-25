@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile
+from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion
 
 #region Inicio
 
@@ -660,10 +660,61 @@ def Listado_Restaurantes (request):
 
 def View_Habitaciones (request):
 
-    return render (request, 'Habitaciones/Index.html')
+    habitacion = Habitacion.objects.all()
 
-def Agregar_Habitacion (request):
+    context = {'habitacion':habitacion}
 
-    return render (request, 'Habitaciones/AgregarHabitacion.html')
+    return render (request, 'Habitaciones/Index.html', context)
+
+def Agregar_Habitacion(request):
+    acomodacion = TipoHabitacion.objects.all()
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        foto = request.FILES['foto']
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        estado = request.POST.get('estado')
+        tipo_habitacion = request.POST.get('tipo')
+        habitacion = Habitacion(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,  tipo_habitacion_id=tipo_habitacion)
+        habitacion.save()
+        return redirect('/Habitaciones/Index')
+    context = {'Tipo_Habitacion': acomodacion}
+    return render(request, 'Habitaciones/AgregarHabitacion.html', context)
+
+def Tipo_Habitacion (request):
+
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo')
+        camas = request.POST.get('camas')
+        banios = request.POST.get('banios')
+
+        Tipo_Habitacion = TipoHabitacion(tipo= tipo, camas = camas, banios = banios)
+
+        Tipo_Habitacion.save()
+        return redirect('/Habitacion/Agregar')
+    
+    return render (request, 'Habitaciones/TipoHabitacion.html')
+
+def Listado_Habitaciones(request):
+
+    busqueda = request.GET.get('buscar')
+    habitacion = Habitacion.objects.all()
+
+    if busqueda:
+        servicio = Servicio.objects.filter(
+            Q(nombre__icontains = busqueda)
+        ).distinct()
+
+    paginador = Paginator(habitacion,5)
+    pagina = request.GET.get('page') or 1
+    habitacion = paginador.get_page(pagina)
+    current_page = int(pagina)
+
+    paginas = range(1, habitacion.paginator.num_pages + 1)
+
+    context = { 'habitacion':habitacion,'current_page':current_page,'paginas':paginas}
+    
+
+    return render(request,'Habitaciones/ListadoHabitaciones.html',context)
 
 #endregion
