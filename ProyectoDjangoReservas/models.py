@@ -69,3 +69,31 @@ class TipoHabitacion(models.Model):
         db_table = 'tipo_habitacion'
         verbose_name = 'Tipo de Habitación'
         verbose_name_plural = 'Tipos de Habitaciones'
+
+class ReservaServicio:
+    id = models.AutoField(primary_key=True, verbose_name='ID')
+    estado = models.BooleanField(verbose_name='Estado')
+    usuario_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Id de usuario')
+    servicio_id = models.ForeignKey('Servicio', on_delete=models.CASCADE, verbose_name='Id de servicio')
+    fecha = models.DateField(null=True, blank=True)
+    num_personas= models.IntegerField(null=True, blank=True)
+    precio_total = models.CharField(max_length=45, null=True, blank=True)
+
+    class Meta:
+        db_table = 'reserva_servicio'
+        verbose_name = 'Reserva de Servicio'
+        verbose_name_plural = 'Reservas de Servicios'
+
+class ReservaHabitacion:
+    id = models.AutoField(primary_key=True, verbose_name='ID')
+    estado = models.BooleanField(verbose_name='Estado')
+    usuario_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Id de usuario')
+    habitacion_id = models.ForeignKey('Habitacion', on_delete=models.CASCADE, verbose_name='Id de habitacion')
+    fecha_inicio = models.DateField(null=True, blank=True)
+    fecha_final = models.DateField(null=True, blank=True)
+    precio_total = models.CharField(max_length=45, null=True, blank=True)
+
+    class Meta:
+        db_table = 'reserva_habitacion'
+        verbose_name = 'Reserva de Habitacion'
+        verbose_name_plural = 'Reservas de Habitaciones'

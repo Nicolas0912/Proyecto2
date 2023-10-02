@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion
+from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio
 
 #region Inicio
 
@@ -69,7 +69,7 @@ def View_Servicios(request):
 def Crear_Servicio(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
-        foto = request.FILES['foto']
+        foto = request.FILES.get('foto')
         descripcion = request.POST.get('descripcion')
         precio = request.POST.get('precio')
         estado = request.POST.get('estado')
@@ -99,23 +99,35 @@ def Crear_Servicio(request):
             messages.error(request, 'La descripción no puede superar los 500 caracteres.')
             return redirect('/Servicio/Agregar')
         
-        # Verificar que el precio no sea un número negativo
-        if float(precio) < 0:
-            messages.error(request, 'El precio no puede ser un número negativo.')
+        # Verificar que el precio sea un número positivo
+        try:
+            precio = float(precio)
+            if precio < 0:
+                raise ValueError
+        except ValueError:
+            messages.error(request, 'El precio debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
-        # Verificar que el número mínimo no sea negativo
-        if int(min_personas) < 0:
-            messages.error(request, 'El número mínimo de personas no puede ser negativo.')
+        # Verificar que el número mínimo sea un número positivo
+        try:
+            min_personas = int(min_personas)
+            if min_personas < 0:
+                raise ValueError
+        except ValueError:
+            messages.error(request, 'El número mínimo de personas debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
-        # Verificar que el número máximo no sea negativo
-        if int(max_personas) < 0:
-            messages.error(request, 'El número máximo de personas no puede ser negativo.')
+        # Verificar que el número máximo sea un número positivo
+        try:
+            max_personas = int(max_personas)
+            if max_personas < 0:
+                raise ValueError
+        except ValueError:
+            messages.error(request, 'El número máximo de personas debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
         # Verificar que el número mínimo no sea mayor que el número máximo
-        if int(min_personas) > int(max_personas):
+        if min_personas > max_personas:
             messages.error(request, 'El número mínimo de personas no puede ser mayor que el número máximo de personas.')
             return redirect('/Servicio/Agregar')
         
@@ -127,11 +139,11 @@ def Crear_Servicio(request):
         
         # Guardar el objeto Servicio
         servicio.save()
+        
+        return redirect('/Servicios/Index')
+    
+    return render(request, 'Servicios/AgregarServicio.html')
 
-        return redirect ('/Servicios/Index')
-
-    return render (request, 'Servicios/AgregarServicio.html')
- 
 def Listado_Servicios (request):
 
     busqueda = request.GET.get('buscar')
@@ -545,11 +557,10 @@ def Reserva_Servicio(request, id):
     if request.method == 'POST':
         fecha_inicio = request.POST.get('fecha_inicio')
         fecha_final = request.POST.get('fecha_final')
-        telefono = request.POST.get('telefono')
-        documento = request.POST.get('documento')
+
 
         if fecha_inicio and fecha_final and telefono and documento:
-            reserva = Reserva()
+            reserva = ReservaServicio()
             reserva.usuario = usuario
             reserva.servicio = servicio
             reserva.fecha_inicio = request.POST.get('fecha_inicio') 
@@ -565,11 +576,11 @@ def Reserva_Servicio(request, id):
 
 def Listado_Reservas (request):
 
-    reserva = Reserva.objects.all()
+    reserva = ReservaServicio.objects.all()
 
     busqueda = request.GET.get('buscar')
     if busqueda:
-        reserva = Reserva.objects.filter(
+        reserva = ReservaServicio.objects.filter(
             Q(documento__icontains = busqueda) 
         ).distinct()
 
@@ -585,7 +596,7 @@ def Listado_Reservas (request):
 
 def Estado_Reserva(request, id):
 
-    reserva = Reserva.objects.get(id=id)
+    reserva = ReservaServicio.objects.get(id=id)
 
     # Cambiar el estado actual al estado opuesto
     reserva.estado = not reserva.estado
@@ -596,7 +607,7 @@ def Estado_Reserva(request, id):
 
 def Reservas_Usuario (request):
 
-    reservas = Reserva.objects.all()
+    reservas = ReservaServicio.objects.all()
 
     context = {'reservas':reservas}
 
@@ -619,7 +630,7 @@ def View_Restaurantes (request):
 
 def Agregar_Restaurante(request):
     if request.method == 'POST':
-        if request.POST.get('name') and request.FILES['url_img'] and request.POST.get('descripcion') and request.POST.get('ubicacion') and request.POST.get('estado'):
+        if request.POST.get('name') and request.FILES['url_img'] and request.POST.get('descripcion') and request.POST.get('ubicacion') and request.POST.get('is_active'):
             restaurante = Restaurante()
             restaurante.name = request.POST.get('name')
             restaurante.url_img = request.FILES['url_img']

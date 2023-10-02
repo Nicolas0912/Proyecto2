@@ -15,28 +15,31 @@
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Nombre del Restaurante:</span>
                             <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 name="name"required/>
                         </label>
 
-                        <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400">Foto</span>
-                            <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                name="url_img" type="file" required/>
-                        </label>
+                        <div class="grid grid-cols-2 gap-5 ">
+                            <label class="block pt-2">
+                                <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Foto del Servicio:</span>
+                                <input type="file" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-400 file:text-zinc-900 hover:file:bg-blue-300 pt-2" name="url_img" required onchange="previewImage(event)"/>
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG or JPEG (MAX. 400kb).</p>
+                              </label>
+
+                              <img id="preview-image" class="max-h-40 max-w-40 rounded-lg" alt="Vista previa de la imagen" style="display: none;">
+                        </div>
 
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Descripcion</span>
                             <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                  name="descripcion" type="text" required >
                         </label>
 
                         <label class="block mt-4 text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Direccion</span>
                             <input
-                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-400 focus:outline-none focus:shadow-outline-blue dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 name="ubicacion"required type="text"/>
                         </label>
 
