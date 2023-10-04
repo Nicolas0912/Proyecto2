@@ -114,6 +114,18 @@
   });
 </script>
   
+<script>
+  function calcularPrecioTotal() {
+      var numPersonas = document.getElementById("num_personas").value;
+      console.log(numPersonas)
+      // Realiza el cálculo del precio total dependiendo del número de personas
+      var precioUnitario = document.getElementById("precio").value; // Precio por persona
+      console.log(precioUnitario)
+      var precioTotal = numPersonas * precioUnitario;
+      console.log(precioTotal)
+      document.getElementById("precio_total").innerHTML = precioTotal;
+  }
+  </script>
     
 </body>
 

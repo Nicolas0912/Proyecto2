@@ -19,7 +19,8 @@
 
             <div class="fex py-4">
                 <div class="">
-                    <p class="text-3xl font-semibold text-gray-800 ">$ {{ servicio.precio }}</p>
+                    <p class="border-none text-3xl font-semibold text-gray-800">$ {{ servicio.precio }}</p>
+                    <input class="border-none hidden text-3xl font-semibold text-gray-800" disabled id="precio" value="{{ servicio.precio }}">
                 </div>
                 
                 <div class="pt-1 text-2xl">
@@ -43,34 +44,42 @@
 
             <form action="" method="post">
                 {% csrf_token %}
-            <div class="flex pt-4"> 
-                <div class="">
-                    <label class="text-lg text-gray-700 dark:text-gray-200 ">Fecha de llegada:</label>
-                    <input class="rounded-lg " type="date" name="fecha_inicio" id=""> 
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha:</label>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="date" id=""> 
+                    </div>
+                    <div class="pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nº de Personas:</label>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="num_personas" oninput="calcularPrecioTotal()" type="number" name="num_personas">
+                    </div> 
+                    <span class="block mb-2 text-m font-semibold text-gray-900 dark:text-white">
+                        Precio Total: <span class="text-m font-semibold text-blue-600 capitalize dark:text-white" id="precio_total" name="precio_total"></span>
+                    </span>
                 </div>
 
-                <div class="">
-                    <label class="text-lg text-gray-700 dark:text-gray-200">Fecha de salida:</label>
-                    <input class="rounded-lg" type="date" name="fecha_final" id=""> 
+                <div class="pt-4">
+                    <span class="text-lg font-semibold text-blue-500 capitalize dark:text-white">Datos del Usuario:</span>
                 </div>
 
-            </div>
-            <div class="pt-4">
-                <label class="text-lg text-gray-700 dark:text-gray-200 ">Numero de Documento:</label>
-                <input class="disabled:opacity-75 w-full rounded-lg" type="number" name="documento">
-            </div> 
-            <div class="pt-4">
-                <label class="text-lg text-gray-700 dark:text-gray-200 ">Nombre:</label>
-                <input class="disabled:opacity-75 w-full rounded-lg" disabled type="text" value="{{ user.first_name }} {{ user.last_name }}">
-            </div> 
-            <div class="pt-4">
-                <label class="text-lg text-gray-700 dark:text-gray-200 ">Correo:</label>
-                <input class="disabled:opacity-75 w-full rounded-lg" disabled type="text" value="{{ user.email }}">
-            </div> 
-            <div class="pt-4">
-                <label class="text-lg text-gray-700 dark:text-gray-200 ">Telefono:</label>
-                <input class=" w-full rounded-lg" type="number" name="telefono" value="{{ profile.id }}">
-            </div> 
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre Completo:</label>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled value="{{ user.first_name }} {{ user.last_name }}">
+                    </div> 
+                    <div class="pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nº de Documento:</label>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled value="{{ profile.documento }}">
+                    </div> 
+                    <div class="pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telefono:</label>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="number" disabled value="{{ profile.telefono }}">
+                    </div> 
+                </div>
+                <div class="pt-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo:</label>
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled value="{{ user.email }}">
+                </div> 
 
             <div id="calendario">
                 

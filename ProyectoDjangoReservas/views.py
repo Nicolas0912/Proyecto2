@@ -554,24 +554,26 @@ def Usuario_admin(request, id):
 def Reserva_Servicio(request, id):
     servicio = get_object_or_404(Servicio, id=id)
     usuario = request.user
+    profile = Profile.objects.get()
+
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_inicio')
-        fecha_final = request.POST.get('fecha_final')
+        fecha = request.POST.get('fecha')
+        num_personas = request.POST.get('num_personas')
+        precio_total = request.POST.get('precio_total')
 
 
-        if fecha_inicio and fecha_final and telefono and documento:
+        if fecha and fecha and num_personas and precio_total:
             reserva = ReservaServicio()
-            reserva.usuario = usuario
-            reserva.servicio = servicio
-            reserva.fecha_inicio = request.POST.get('fecha_inicio') 
-            reserva.fecha_final = request.POST.get('fecha_final')
+            reserva.usuario_id = usuario
+            reserva.servicio_id = servicio
+            reserva.fecha = request.POST.get('fecha') 
             reserva.estado = True
-            reserva.telefono = telefono
-            reserva.documento = request.POST.get('documento')
+            reserva.num_personas = request.POST.get('num_personas')
+            reserva.precio_total = request.POST.get('precio_total')
             reserva.save()
             return redirect('/Servicios/Index')
 
-    context = {'servicio': servicio}
+    context = {'servicio': servicio, 'profile':profile}
     return render(request, 'Reservas/ReservarServicio.html', context)
 
 def Listado_Reservas (request):
