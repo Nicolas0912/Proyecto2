@@ -553,32 +553,32 @@ def Usuario_admin(request, id):
 
 def Reserva_Servicio(request, id):
     servicio = get_object_or_404(Servicio, id=id)
-    usuario = request.user
-    profile = Profile.objects.get()
+    profile = get_object_or_404(Profile, auth_user=request.user)
 
     if request.method == 'POST':
         fecha = request.POST.get('fecha')
         num_personas = request.POST.get('num_personas')
-        precio_total = request.POST.get('precio_total')
 
+        reserva = ReservaServicio()
+        reserva.usuario = profile  # Asignar la instancia de Profile
+        reserva.servicio = servicio  # Asignar la instancia de Servicio
+        reserva.fecha = datetime.strptime(fecha, '%Y-%m-%d') 
+        reserva.estado = 1
+        reserva.num_personas = num_personas
+        precio = servicio.precio
+        reserva.precio_total = int(num_personas) * float(precio)
 
-        if fecha and fecha and num_personas and precio_total:
-            reserva = ReservaServicio()
-            reserva.usuario_id = usuario
-            reserva.servicio_id = servicio
-            reserva.fecha = request.POST.get('fecha') 
-            reserva.estado = True
-            reserva.num_personas = request.POST.get('num_personas')
-            reserva.precio_total = request.POST.get('precio_total')
-            reserva.save()
-            return redirect('/Servicios/Index')
+        reserva.save()
+        
+        return redirect('/Servicios/Index')
 
-    context = {'servicio': servicio, 'profile':profile}
+    context = {'servicio': servicio, 'profile': profile}
     return render(request, 'Reservas/ReservarServicio.html', context)
 
 def Listado_Reservas (request):
 
     reserva = ReservaServicio.objects.all()
+    profile = Profile.objects.all()
 
     busqueda = request.GET.get('buscar')
     if busqueda:
@@ -592,7 +592,7 @@ def Listado_Reservas (request):
     current_page = int(pagina)
     paginas = range(1, reserva.paginator.num_pages + 1)
     
-    context = {'reservas':reserva,'current_page':current_page,'paginas':paginas}
+    context = {'reservas':reserva,'current_page':current_page,'paginas':paginas,'profile':profile}
 
     return render(request,'Reservas/ListadoReservas.html', context)
 
@@ -610,8 +610,9 @@ def Estado_Reserva(request, id):
 def Reservas_Usuario (request):
 
     reservas = ReservaServicio.objects.all()
+    profile = Profile.objects.all()
 
-    context = {'reservas':reservas}
+    context = {'reservas':reservas, 'profile':profile}
 
     return render(request,'Reservas/ReservasUsuario.html',context)
 #endregion

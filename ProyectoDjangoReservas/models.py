@@ -70,12 +70,12 @@ class TipoHabitacion(models.Model):
         verbose_name = 'Tipo de Habitación'
         verbose_name_plural = 'Tipos de Habitaciones'
 
-class ReservaServicio:
+class ReservaServicio(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='ID')
     estado = models.BooleanField(verbose_name='Estado')
-    usuario_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Id de usuario')
-    servicio_id = models.ForeignKey('Servicio', on_delete=models.CASCADE, verbose_name='Id de servicio')
-    fecha = models.DateField(null=True, blank=True)
+    usuario = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Id de usuario')
+    servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE, verbose_name='Id de servicio')
+    fecha = models.DateField(auto_now=False, auto_now_add=False)
     num_personas= models.IntegerField(null=True, blank=True)
     precio_total = models.CharField(max_length=45, null=True, blank=True)
 

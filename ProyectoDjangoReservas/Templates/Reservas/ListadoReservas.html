@@ -41,7 +41,7 @@
                                     <div class="font-semibold text-left">Feccha Inicio</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Fecha Final</div>
+                                    <div class="font-semibold text-left">Nº Personas</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Activo</div>
@@ -58,16 +58,16 @@
                                     <div class="text-left font-medium text-blue-500">{{ c.id }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.documento }}</div>
+                                    <div class="text-left">{{ c.usuario.documento }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.first_name }} {{ c.usuario.last_name }}</div>
+                                    <div class="text-left">{{ c.usuario.auth_user.first_name }} {{ c.usuario.auth_user.last_name }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.email }}</div>
+                                    <div class="text-left">{{ c.usuario.auth_user }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.telefono }}</div>
+                                    <div class="text-left">{{ c.usuario.telefono }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="text-left">
@@ -75,10 +75,10 @@
                                     </div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.fecha_inicio }}</div>
+                                    <div class="text-left">{{ c.fecha }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.fecha_final }}</div>
+                                    <div class="text-left">{{ c.num_personas }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.estado == True %}
