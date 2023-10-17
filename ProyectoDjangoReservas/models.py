@@ -64,6 +64,7 @@ class TipoHabitacion(models.Model):
     tipo = models.CharField(max_length=45)
     camas = models.CharField(max_length=25)
     banios = models.CharField(max_length=45)
+    personas = models.CharField(max_length=45)
 
     class Meta:
         db_table = 'tipo_habitacion'

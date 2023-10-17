@@ -44,6 +44,9 @@
                                     <div class="font-semibold text-left">Nº Personas</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Precio Total</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Activo</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
@@ -79,6 +82,9 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="text-left">{{ c.num_personas }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-left">{{ c.precio_total }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.estado == True %}

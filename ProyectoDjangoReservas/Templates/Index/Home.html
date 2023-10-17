@@ -1,19 +1,84 @@
 {% include "Inc/Header.html" %}
 
-<main class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-    <div class="text-center">
-      <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">CABAÑAS YJ</h1>
-      <p class="mt-6 text-base leading-7 text-gray-600">estamos ubicados en playa tranquila, en la zona más bonita con aguas cristalinas. Las cabañas están a pocos pasos de la orilla de la playa, como huésped nuestros tienes acceso ilimitado a las camas de playa ubicadas frente al mar. Posibilidad de asistir a excursiones en los alrededores cómo visita al plantón luminoso, tour del manglar, o ida a las islas del rosario y otras zonas aledañas en las que podrás disfrutar de zonas paradisíacas.
-      </p>
-      <div class="mt-10 flex items-center justify-center gap-x-6">
-        <a href="/Servicios/Index" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Servicios</a>
-        <a href="/Galeria/Index" class="text-sm font-semibold text-gray-900">Galeria <span aria-hidden="true">&rarr;</span></a>
-      </div>
+<section class="bg-white dark:bg-gray-900">
+  <div class="container px-6 py-8 mx-auto">
+
+    <div id="default-carousel" class="relative w-full" data-carousel="slide">
+        <!-- Carousel wrapper -->
+        <div class="relative h-96 overflow-hidden rounded-lg md:h-96">
+          {% for c in imagenes %}
+             <!-- Item 1 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="../media/{{ c.url_imagen }}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            </div>
+          {% endfor %} 
+        </div>
+        <div class="absolute z-50 grid text-center inset-0 w-full p-5 bg-gray-900/75 rounded-lg">
+          <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-100 sm:text-5xl">CABAÑAS YJ</h1>
+          <p class="mt-6 text-lg text-center leading-6 text-gray-100 px-36">Nuestra ubicación se encuentra en Playa Tranquila, una zona de aguas cristalinas que se destaca por su belleza. Las cabañas están estratégicamente situadas a pocos pasos de la orilla, brindándote un acceso ilimitado a nuestras cómodas camas de playa frente al mar. Además, como huésped, tendrás la oportunidad de participar en emocionantes excursiones en los alrededores, como visitas al bosque luminoso, recorridos por el manglar y viajes a las Islas del Rosario y otras áreas cercanas, donde podrás disfrutar de auténticos paraísos naturales.
+          </p>
+          <div class="mt-10 flex items-center justify-center gap-x-6">
+            <a href="/Servicios/Index" class="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Servicios</a>
+            <a href="/Galeria/Index" class="text-sm font-semibold text-gray-100">Galeria <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>  
     </div>
 
+    <swiper-container class="mySwiper p-10" pagination="true" pagination-clickable="true" space-between="30"
+    slides-per-view="4">
+    {% for c in servicio %}
+    <swiper-slide>
+              <div class="w-full  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     
-  </main>
+              <div class="flex items-center justify-between p-2">
+                {% if user.is_superuser == 1 %}
+                  <form action="{% url '/Servicio/Estado/' c.id %}" method="post">
+                  {% csrf_token %}
+                  {% if c.estado == True %}
+                  <button class="text-white bg-red-400 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" type="submit">Ocultar</button>
+                  {% else %}
+                  <button class="text-white bg-green-400 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800" type="submit">Visible</button>
+                  {% endif %}
+                  </form>
+                {% endif %}
+                </div>
+    
+              <a href="#">
+                <img class="h-80 w-full rounded-xl p-2 mb-2" src="../media/{{ c.foto }}" alt="product image" />
+              </a>
+              <div class="px-5 pb-5">
+                <a href="#">
+                  <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-2">{{ c.nombre }}</h5>
+                </a>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ c.descripcion }}</p>
+                <div class="flex items-center mt-2.5 mb-5">
+                  <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                  <svg class="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                  <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
+                </div>
 
+              </div>
+            </div>
+    </swiper-slide>
+    {% endfor %}
+    </swiper-container>
+
+  </div>
+
+</section>
   
 
 {% include "Inc/Footer.html" %}

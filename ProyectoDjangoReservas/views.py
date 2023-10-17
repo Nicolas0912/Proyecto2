@@ -19,7 +19,21 @@ from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profil
 
 def View_Inicio (request):
 
-    return render (request,'Index/Home.html')
+    imagenes = Galeria.objects.all()
+    servicio = Servicio.objects.all()
+
+        # Separar los elementos de la cadena dias_dispo en una lista
+    for c in servicio:
+        c.dias_dispo = c.dias_dispo.split("-")
+    
+    context = {
+        'imagenes':imagenes,
+        'servicio': servicio
+    }
+
+
+
+    return render (request,'Index/Home.html', context)
 
 #endregion
 
@@ -701,8 +715,9 @@ def Tipo_Habitacion (request):
         tipo = request.POST.get('tipo')
         camas = request.POST.get('camas')
         banios = request.POST.get('banios')
+        personas = request.POST.get('personas')
 
-        Tipo_Habitacion = TipoHabitacion(tipo= tipo, camas = camas, banios = banios)
+        Tipo_Habitacion = TipoHabitacion(tipo= tipo, camas = camas, banios = banios, personas = personas)
 
         Tipo_Habitacion.save()
         return redirect('/Habitacion/Agregar')
