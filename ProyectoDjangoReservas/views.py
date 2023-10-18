@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+import random
 from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio
 
 #region Inicio
@@ -21,14 +22,16 @@ def View_Inicio (request):
 
     imagenes = Galeria.objects.all()
     servicio = Servicio.objects.all()
+    habitacion = Habitacion.objects.all()
 
         # Separar los elementos de la cadena dias_dispo en una lista
     for c in servicio:
         c.dias_dispo = c.dias_dispo.split("-")
-    
+
     context = {
         'imagenes':imagenes,
-        'servicio': servicio
+        'servicio': servicio,
+        'habitacion': habitacion
     }
 
 
@@ -440,10 +443,8 @@ def Listado_Usuarios (request):
     profile = Profile.objects.all()
 
     if busqueda:
-        usuario = User.objects.filter(
-            Q(first_name__icontains = busqueda) | 
-            Q(last_name__icontains = busqueda) | 
-            Q(email__icontains = busqueda)
+        profile = Profile.objects.filter(
+            Q(documento__icontains = busqueda)
         ).distinct()
 
     paginador = Paginator(usuario,8)
@@ -597,7 +598,7 @@ def Listado_Reservas (request):
     busqueda = request.GET.get('buscar')
     if busqueda:
         reserva = ReservaServicio.objects.filter(
-            Q(documento__icontains = busqueda) 
+            Q(id__icontains = busqueda) 
         ).distinct()
 
     paginador = Paginator(reserva,10)

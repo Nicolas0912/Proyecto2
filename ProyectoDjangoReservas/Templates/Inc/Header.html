@@ -75,14 +75,14 @@
         <!-- button profile -->
         <div>
           <button type="button" @click="profileOpen = !profileOpen" @click.outside="profileOpen = false"
-            class="h-9 w-9 overflow-hidden rounded-full">
+            class="h-9 w-9 overflow-hidden rounded-full ">
             <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="plchldr.co" />
           </button>
     
           <!-- dropdown profile -->
     
           <div
-            class="absolute right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
+            class="absolute z-30 right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
             x-show="profileOpen" x-transition>
     
             <div class="flex flex-col space-y-3 p-2">
