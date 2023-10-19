@@ -4,8 +4,8 @@
     
     <div class="flex justify-center gap-x-20 pb-10 pt-10">
 
-        <div class="h-auto max-w-md justify-self-center">
-            <img class="object-scale-down rounded-lg " src=" /media/{{ servicio.foto }}" alt="">
+        <div class=" max-w-md justify-self-center">
+            <img class="h-full rounded-lg " src=" /media/{{ servicio.foto }}" alt="">
         </div>
 
         <div class="h-auto max-w-md justify-self-center"> 
@@ -47,7 +47,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="pt-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha:</label>
-                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="date" id="" name="fecha"> 
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="date" id="" name="fecha" min="{{ servicio.fecha_disponible }}">
                     </div>
                     <div class="pt-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nº de Personas:</label>
