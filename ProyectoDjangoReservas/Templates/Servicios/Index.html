@@ -23,7 +23,18 @@
 				</div>
 				<div class="pt-10 grid grid-cols-3 gap-4 place-content-stretch">
 					{% for c in servicio %}
-					<div class=" w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+					{% if c.estado == True %}
+					<div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+						{% if user.is_superuser == 1 %}
+							<form class="mt-2.5 mb-2" action="{% url '/Servicio/Estado/' c.id %}" method="post">
+							{% csrf_token %}
+							{% if c.estado == True %}
+							<button class='px-2 bg bx bxs-low-vision' type="submit"></button>
+							{% else %}
+							<button class='px-2 bx bx-show' type="submit"></button>
+							{% endif %}
+							</form>
+						{% endif %}
 						<a href="#">
 							<img class="pb-8 h-96 w-full rounded-t-lg" src="../media/{{ c.foto }}" alt="product image" />
 						</a>
@@ -72,6 +83,7 @@
 							</div>
 						</div>
 					</div>
+					{% endif %}
 					{% endfor %}
 				</div>
 			</div>

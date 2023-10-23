@@ -34,8 +34,6 @@ def View_Inicio (request):
         'habitacion': habitacion
     }
 
-
-
     return render (request,'Index/Home.html', context)
 
 #endregion
@@ -50,7 +48,7 @@ def Estado_Servicios (request, id):
 
     servicio.save()
 
-    return redirect ('/Servicios/Ocultos')
+    return redirect ('/Servicios/Index')
 
 def servicios_ocultos(request):
     
@@ -562,6 +560,7 @@ def Usuario_admin(request, id):
     usuario.save()
 
     return redirect('/Usuarios/ListadoUser')
+
 #endregion
 
 #region Reservas
@@ -632,7 +631,7 @@ def Reservas_Usuario (request):
     return render(request,'Reservas/ReservasUsuario.html',context)
 #endregion
 
-# region restaurantes
+#region restaurantes
 
 def View_Restaurantes (request):
 
@@ -690,8 +689,10 @@ def Listado_Restaurantes (request):
 def View_Habitaciones (request):
 
     habitacion = Habitacion.objects.all()
+    cantidad_habitaciones = Habitacion.objects.count()
 
-    context = {'habitacion':habitacion}
+    context = {'habitacion':habitacion,
+               'cantidad_habitaciones':cantidad_habitaciones}
 
     return render (request, 'Habitaciones/Index.html', context)
 
@@ -746,5 +747,20 @@ def Listado_Habitaciones(request):
     
 
     return render(request,'Habitaciones/ListadoHabitaciones.html',context)
+
+def Estado_Habitacion (request, id):
+    habitacion = Habitacion.objects.get(id=id)
+
+    # Cambiar el estado actual al estado opuesto
+    habitacion.estado = not habitacion.estado
+
+    habitacion.save()
+
+    return redirect('/Habitaciones/Index')
+
+def Habitacion_Oculta (request):
+    habitaciones_ocultos = Habitacion.objects.filter(estado=False)
+
+    return render(request, 'Habitaciones/HabitacionesOcultas.html', {'habitacion': habitaciones_ocultos})
 
 #endregion

@@ -66,9 +66,9 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.estado == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.estado }}</div>
+                                    <div class="text-left font-medium text-green-500"><a href="{% url '/Habitacion/Ocultar/' c.id %}">{{ c.estado }}</a></div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.estado }}</div>
+                                    <div class="text-left font-medium text-red-500"><a href="{% url '/Habitacion/Ocultar/' c.id %}">{{ c.estado }}</a></div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">

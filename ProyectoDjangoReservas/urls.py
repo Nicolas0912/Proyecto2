@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
-from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen, Reserva_Servicio, Listado_Reservas, Estado_Reserva, Reservas_Usuario, View_Restaurantes, Agregar_Restaurante, Listado_Restaurantes, Perfil_Usuarios, Estado_Usuario, Usuario_admin, View_Habitaciones, Agregar_Habitacion, Tipo_Habitacion, Listado_Habitaciones
+from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen, Reserva_Servicio, Listado_Reservas, Estado_Reserva, Reservas_Usuario, View_Restaurantes, Agregar_Restaurante, Listado_Restaurantes, Perfil_Usuarios, Estado_Usuario, Usuario_admin, View_Habitaciones, Agregar_Habitacion, Tipo_Habitacion, Listado_Habitaciones, Estado_Habitacion, Habitacion_Oculta
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -63,7 +64,9 @@ urlpatterns = [
 
     path('Habitacion/Agregar', Agregar_Habitacion),
     path('Habitacion/Tipo', Tipo_Habitacion),
-    path('Habitaciones/Listado', Listado_Habitaciones)
+    path('Habitaciones/Listado', Listado_Habitaciones),
+    path('Habitacion/Ocultar/<int:id>', Estado_Habitacion, name='/Habitacion/Ocultar/'),
+    path('Habitaciones/Ocultas', Habitacion_Oculta, name='/Habitaciones/Ocultas')
 
 ]
 
