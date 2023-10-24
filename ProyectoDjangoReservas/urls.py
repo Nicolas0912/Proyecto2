@@ -28,7 +28,7 @@ urlpatterns = [
     path('Index/Home', View_Inicio),
     path('Servicios/Index', View_Servicios, name='Servicios/Index'),
     path('Login/IniciarSesion', View_Login),
-    path('Logout', LogoutUser),
+    path('Logout/', LogoutUser, name='logout'),
     path('Usuarios/ListadoUser', Listado_Usuarios),
     path('Galeria/Index', View_Galeria),
     path('Restaurantes/Index', View_Restaurantes),

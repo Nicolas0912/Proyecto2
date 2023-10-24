@@ -15,6 +15,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 import random
 from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio
+from django.contrib.auth.hashers import make_password, check_password
+from django.views.decorators.csrf import csrf_protect
+from django.urls import reverse
+
 
 #region Inicio
 
@@ -359,20 +363,24 @@ def Eliminar_imagen (request,id):
 #endregion
 
 #region Login
-
+@csrf_protect
 def View_Login(request):
     if request.method == "POST":
-        if request.POST.get('username') and request.POST.get('password'):
-            user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect("/Index/Home")
             else:
                 messages.error(request, 'Credenciales de inicio de sesión incorrectas')
-                return redirect('/Login/IniciarSesion')
-    else:
-        return render(request, 'Login/Login.html')
-    
+        else:
+            messages.error(request, 'Ingrese un email y una contraseña válidos')
+    return render(request, 'Login/Login.html')
+
+#Función para cerrar sesión que redirige al usuario a la página de inicio de sesión.
+@login_required
 def LogoutUser(request):
     logout(request)
     return redirect('/Login/IniciarSesion')
@@ -502,34 +510,26 @@ def Actualizar_Usuarios(request, id):
         perfil = Profile.objects.filter(id=id)
         return render(request, 'Usuarios/ActualizarUsuarios.html', {'perfil': perfil})
     
-def Perfil_Usuarios (request,id):
-
+def Perfil_Usuarios(request, id):
     if request.method == 'POST':
         telefono = request.POST.get('telefono')
         documento = request.POST.get('documento')
         profile_img = request.FILES['profile_img']
-
         # Verificar el formato de la imagen
         if profile_img.name.split(".")[-1].lower() not in ['jpeg', 'jpg', 'png']:
             messages.error(request, 'Formato de imagen no válido. Por favor, seleccione una imagen en formato JPEG, PNG o JPG.')
             return redirect(f'/Usuario/Perfil/{id}')
-            
         # Obtener el usuario actual
         usuario = request.user
-        id = usuario.id
-
         # Generar un nombre de archivo único para la imagen
-        profile_img.name = f'Profile_img_{id}.{profile_img.name.split(".")[-1]}'
-
+        profile_img.name = f'Profile_img_{usuario.id}.{profile_img.name.split(".")[-1]}'
         # Crear un nuevo objeto Profile con los datos del formulario
-        profile = Profile(id=id, telefono=telefono, documento=documento, profile_img=profile_img, auth_user=usuario)
-
+        profile = Profile(id=usuario.id, telefono=telefono, documento=documento, profile_img=profile_img, auth_user=usuario)
         profile.save()
-
-        return redirect ('/Index/Home')
+        return redirect('/Index/Home')
     else:
-        usuario = User.objects.filter(id=id)
-        return render (request, 'Usuarios/CompletarPerfil.html', {'usuario':usuario})
+        usuario = User.objects.get(id=id)
+        return render(request, 'Usuarios/CompletarPerfil.html', {'usuario': usuario})
 
 def Eliminar_Usuario (request, id):
 
