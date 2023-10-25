@@ -40,6 +40,31 @@
     </script>
 
 <script>
+  function previewImages(event) {
+      var input = event.target;
+      var previewContainer = document.getElementById('preview-container');
+      previewContainer.innerHTML = ''; // Limpia el contenedor de previsualización
+  
+      if (input.files && input.files.length > 0) {
+          for (var i = 0; i < input.files.length; i++) {
+              var reader = new FileReader();
+              var image = document.createElement('img');
+              image.className = 'max-h-40 max-w-40 rounded-lg mt-2';
+  
+              reader.onload = (function(img) {
+                  return function(e) {
+                      img.src = e.target.result;
+                  };
+              })(image);
+  
+              reader.readAsDataURL(input.files[i]);
+              previewContainer.appendChild(image);
+          }
+      }
+  }
+  </script>
+
+<script>
   const modal = (el) => {
     const toggle = (wrapperEl, mainEl) => {
       document.querySelector('body').classList.toggle('overflow-y-hidden');

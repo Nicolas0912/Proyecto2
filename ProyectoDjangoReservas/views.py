@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 import random
-from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio
+from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio, ImagenServicio
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
@@ -96,6 +96,7 @@ def Crear_Servicio(request):
         max_personas = request.POST.get('max_personas')
         categoria = request.POST.get('categoria')
         dias_dispo = '-'.join(request.POST.getlist('dias_dispo'))
+        imagenes = request.FILES.getlist('url_img')
         
         # Verificar que los campos no estén vacíos
         if not nombre or not foto or not descripcion or not precio or not estado or not min_personas or not max_personas or not categoria or not dias_dispo:
@@ -158,7 +159,14 @@ def Crear_Servicio(request):
         
         # Guardar el objeto Servicio
         servicio.save()
-        
+
+        # Obtener el ID del servicio recién creado
+        servicio_id = servicio.id
+
+        for imagen in imagenes:
+            imagen_servicio = ImagenServicio(servicio_id=servicio_id, foto=imagen)
+            imagen_servicio.save()
+            
         return redirect('/Servicios/Index')
     
     return render(request, 'Servicios/AgregarServicio.html')
