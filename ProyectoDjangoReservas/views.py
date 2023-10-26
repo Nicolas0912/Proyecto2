@@ -19,6 +19,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 import uuid
+from django.core.exceptions import ValidationError
 
 
 #region Inicio
@@ -88,6 +89,7 @@ def View_Servicios(request):
     
     return render(request, 'Servicios/Index.html', context)
 
+
 def Crear_Servicio(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
@@ -127,7 +129,7 @@ def Crear_Servicio(request):
             precio = float(precio)
             if precio < 0:
                 raise ValueError
-        except ValueError:
+        except (ValueError, TypeError):
             messages.error(request, 'El precio debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
@@ -136,7 +138,7 @@ def Crear_Servicio(request):
             min_personas = int(min_personas)
             if min_personas < 0:
                 raise ValueError
-        except ValueError:
+        except (ValueError, TypeError):
             messages.error(request, 'El número mínimo de personas debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
@@ -145,7 +147,7 @@ def Crear_Servicio(request):
             max_personas = int(max_personas)
             if max_personas < 0:
                 raise ValueError
-        except ValueError:
+        except (ValueError, TypeError):
             messages.error(request, 'El número máximo de personas debe ser un número positivo.')
             return redirect('/Servicio/Agregar')
         
@@ -155,21 +157,34 @@ def Crear_Servicio(request):
             return redirect('/Servicio/Agregar')
         
         # Crear el objeto Servicio
-        servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado, min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
+        try:
+            servicio = Servicio(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado, min_personas=min_personas, max_personas=max_personas, dias_dispo=dias_dispo, categoria=categoria)
+            servicio.full_clean()  # Realizar validaciones del modelo
+            servicio.save()
+        except ValidationError as e:
+            messages.error(request, e.message)
+            return redirect('/Servicio/Agregar')
         
         # Asignar el nombre único a la imagen
         servicio.foto.name = f'S_Img_{nombre}.{ext}'
         
-        # Guardar el objeto Servicio
-        servicio.save()
-
+        # Validar que no se seleccionen más de 5 imágenes
+        if len(imagenes) > 5:
+            messages.error(request, 'Solo se pueden seleccionar un máximo de 5 imágenes.')
+            return redirect('/Servicio/Agregar')
+        
         # Guardar las imágenes relacionadas con el servicio
         for imagen in imagenes:
-            imagen_servicio = ImagenServicio(servicio_id=servicio.id, url_img=imagen)
-            ext = imagen.name.split('.')[-1].lower()
-            imagen_servicio.url_img.name = f'ImgS_{servicio.id}_{str(uuid.uuid4())[:8]}.{ext}'
-            imagen_servicio.save()
-            
+            try:
+                imagen_servicio = ImagenServicio(servicio_id=servicio.id, url_img=imagen)
+                imagen_servicio.full_clean()  # Realizar validaciones del modelo
+                ext = imagen.name.split('.')[-1].lower()
+                imagen_servicio.url_img.name = f'ImgS_{servicio.id}_{str(uuid.uuid4())[:8]}.{ext}'
+                imagen_servicio.save()
+            except ValidationError as e:
+                messages.error(request, e.message)
+                return redirect('/Servicio/Agregar')
+        
         return redirect('/Servicios/Index')
     
     return render(request, 'Servicios/AgregarServicio.html')
@@ -578,6 +593,7 @@ def Usuario_admin(request, id):
 def Reserva_Servicio(request, id):
     servicio = get_object_or_404(Servicio, id=id)
     profile = get_object_or_404(Profile, auth_user=request.user)
+    imagenes = ImagenServicio.objects.all()
 
     if request.method == 'POST':
         fecha = request.POST.get('fecha')
@@ -596,7 +612,7 @@ def Reserva_Servicio(request, id):
         
         return redirect('/Servicios/Index')
 
-    context = {'servicio': servicio, 'profile': profile}
+    context = {'servicio': servicio, 'profile': profile, 'imagenes_servicio': imagenes}
     return render(request, 'Reservas/ReservarServicio.html', context)
 
 def Listado_Reservas (request):

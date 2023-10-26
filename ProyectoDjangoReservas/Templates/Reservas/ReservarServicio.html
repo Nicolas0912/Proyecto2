@@ -4,8 +4,17 @@
     
     <div class="flex justify-center gap-x-20 pb-10 pt-10">
 
-        <div class=" max-w-md justify-self-center">
-            <img class="h-full rounded-lg " src=" /media/{{ servicio.foto }}" alt="">
+        <div class="columns-2 p-10 h-auto max-w-2xl justify-self-center">
+            <a href="/media/{{ servicio.foto }}" data-lightbox="galeria">
+                <img class="py-2 h-96 w-full" src="/media/{{ servicio.foto }}" alt="">
+            </a>
+            {% for i in imagenes_servicio %}
+				{% if i.servicio_id == servicio.id %}
+                <a href="/media/{{ i.url_img }}" data-lightbox="galeria">
+                    <img class="py-2" src="/media/{{ i.url_img }}" alt="">
+                </a>
+                {% endif %}
+            {% endfor %}
         </div>
 
         <div class="h-auto max-w-md justify-self-center"> 
