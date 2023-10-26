@@ -27,8 +27,8 @@ class Servicio(models.Model):
         db_table = 'servicios'
 
 class ImagenServicio(models.Model):
-    servicio_id = models.ForeignKey('Servicio', on_delete=models.CASCADE)
-    foto = models.ImageField(upload_to='imagenes_bd/', null=True)
+    servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE)
+    url_img = models.ImageField(upload_to='imagenes_servicios_bd/', null=True)
 
     class Meta:
         db_table = 'imagen_servicio'

@@ -18,6 +18,7 @@ from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profil
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
+import uuid
 
 
 #region Inicio
@@ -68,6 +69,7 @@ def View_Servicios(request):
     categoria = request.GET.get('categoria')
     servicio = Servicio.objects.all()
     cantidad_servicios = Servicio.objects.count()
+    imagenes = ImagenServicio.objects.all()
 
     if categoria:
         servicio = Servicio.objects.filter(
@@ -80,7 +82,8 @@ def View_Servicios(request):
 
     context = {
         'servicio': servicio,
-        'cantidad_servicios': cantidad_servicios
+        'cantidad_servicios': cantidad_servicios,
+        'imagenes_servicio': imagenes
     }
     
     return render(request, 'Servicios/Index.html', context)
@@ -160,11 +163,11 @@ def Crear_Servicio(request):
         # Guardar el objeto Servicio
         servicio.save()
 
-        # Obtener el ID del servicio recién creado
-        servicio_id = servicio.id
-
+        # Guardar las imágenes relacionadas con el servicio
         for imagen in imagenes:
-            imagen_servicio = ImagenServicio(servicio_id=servicio_id, foto=imagen)
+            imagen_servicio = ImagenServicio(servicio_id=servicio.id, url_img=imagen)
+            ext = imagen.name.split('.')[-1].lower()
+            imagen_servicio.url_img.name = f'ImgS_{servicio.id}_{str(uuid.uuid4())[:8]}.{ext}'
             imagen_servicio.save()
             
         return redirect('/Servicios/Index')
@@ -278,7 +281,6 @@ def Actualizar_Servicios(request, id):
             servicio.dias_dispo = dias_dispo
             servicio.max_personas = request.POST.get('max_personas')
             servicio.min_personas = request.POST.get('min_personas')
-            
             servicio.save()
             
             return redirect('/Servicios/Index')
