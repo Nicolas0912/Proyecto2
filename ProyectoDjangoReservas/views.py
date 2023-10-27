@@ -771,7 +771,6 @@ def Listado_Habitaciones(request):
 
     context = { 'habitacion':habitacion,'current_page':current_page,'paginas':paginas}
     
-
     return render(request,'Habitaciones/ListadoHabitaciones.html',context)
 
 def Estado_Habitacion (request, id):
