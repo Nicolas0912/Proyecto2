@@ -24,7 +24,7 @@
                 <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">{{ servicio.nombre }}</h1>
             </div>
             <div class="py-4">
-                <p>{{ servicio.descripcion }}</p> 
+                <p class="text-justify">{{ servicio.descripcion }}</p> 
             </div>
             <div class="py-4">
                 <div class="">
@@ -35,43 +35,43 @@
             <div class="flex justify-between">
                 <div class="flex flex-row pt-1 text-2xl">
                     <div>
-                        <i class='bx bx-swim'></i>
+                        <i class='bx bx-swim mx-1'></i>
                     </div>
                     {% if servicio.categoria == 'Habitacion' %}
                     <div>
-                        <i class='bx bx-bed' ></i>
+                        <i class='bx bx-bed mx-1' ></i>
                     </div>
                     <div>
-                        <i class='bx bxs-washer'></i>
+                        <i class='bx bxs-washer mx-1'></i>
                     </div>
                     <div>
-                        <i class='bx bx-restaurant'></i>
+                        <i class='bx bx-restaurant mx-1'></i>
                     </div>
                     {% endif %}
                     {% if servicio.categoria == 'Actividad' %}
                     <div>
-                        <i class='bx bxs-tree' ></i>
+                        <i class='bx bxs-tree mx-1' ></i>
                     </div>
                     <div>
-                        <i class='bx bxs-ship'></i>
+                        <i class='bx bxs-ship mx-1'></i>
                     </div>
                     <div>
-                        <i class='bx bx-party' ></i>
+                        <i class='bx bx-party mx-1' ></i>
                     </div>
                     {% endif %}
                 </div>
-                <div class="flex flex-row pt-1 text-2xl">
+                <div class="flex flex-row pt-1 text-l">
                     <div>
                         <i class='bx bxs-user'></i>
-                        <span class="bg-blue-100 text-gray-800 font-medium font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-1">Minimo: {{ servicio.min_personas }}</span>
+                        <span class="bg-blue-100 text-gray-800 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-1">Minimo: {{ servicio.min_personas }}</span>
                     </div>
                     <div>
                         <i class='bx bxs-group pl-5'></i>
-                        <span class="bg-blue-100 text-gray-800  font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-1">Maximo: {{ servicio.max_personas }}</span>   
+                        <span class="bg-blue-100 text-gray-800 mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-1">Maximo: {{ servicio.max_personas }}</span>   
                     </div>
                 </div>
             </div>
-            <div class="pt-4">
+            <div class="pt-6">
                 <span class="text-lg font-semibold text-blue-500 capitalize dark:text-white">Datos de Reserva:</span>
             </div>
             <form action="" method="post">
@@ -85,14 +85,14 @@
                                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                 </svg>
                             </div>
-                            <input datepicker datepicker-orientation="bottom right" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" name="fecha">
+                            <input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" name="fecha">
                           </div>
                     </div>
                     <div class="pt-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nº de Personas:</label>
                         <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="num_personas" oninput="calcularPrecioTotal()" type="number" name="num_personas">
                     </div> 
-                    <span class="block mb-2 text-m font-semibold text-gray-900 dark:text-white">
+                    <span class="block my-4 text-xl font-semibold text-gray-900 dark:text-white">
                         Precio Total: <span class="text-m font-semibold text-blue-600 capitalize dark:text-white" id="precio_total" name="precio_total"></span>
                     </span>
                 </div>

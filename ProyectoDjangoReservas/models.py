@@ -77,6 +77,13 @@ class TipoHabitacion(models.Model):
         db_table = 'tipo_habitacion'
         verbose_name = 'Tipo de Habitación'
         verbose_name_plural = 'Tipos de Habitaciones'
+        
+class ImagenHabitacion(models.Model):
+    habitacion = models.ForeignKey('Habitacion', on_delete=models.CASCADE)
+    url_img = models.ImageField(upload_to='imagenes_habitacion_bd/', null=True)
+
+    class Meta:
+        db_table = 'imagen_habitacion'
 
 class ReservaServicio(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='ID')

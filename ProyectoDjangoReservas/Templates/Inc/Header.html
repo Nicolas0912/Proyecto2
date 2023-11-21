@@ -50,11 +50,11 @@
       <!-- dropdown profile -->
 
       <div
-        class="absolute right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
+        class="absolute right-2 mt-1 w-52 z-50 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
         x-show="profileOpen" x-transition>
-        <div class="flex items-center space-x-2 p-2">
+        <div class="flex items-center space-x-2 p-2 w-16">
           <img src="{{ profile.profile_img.url }}" alt="perfil" />
-          <div class="font-medium">{{ user.first_name }} {{ user.last_name }}</div>
+          <div class="font-sm">{{ user.first_name }} {{ user.last_name }}</div>
         </div>
 
         <div class="flex flex-col space-y-3 p-2">
@@ -85,7 +85,7 @@
           <!-- dropdown profile -->
     
           <div
-            class="absolute z-30 right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
+            class="absolute z-50 right-2 mt-1 w-52 divide-y divide-gray-200 rounded-md border border-gray-200 bg-white shadow-md"
             x-show="profileOpen" x-transition>
     
             <div class="flex flex-col space-y-3 p-2">

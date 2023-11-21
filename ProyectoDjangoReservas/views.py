@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 import random
-from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio, ImagenServicio
+from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio, ImagenServicio, ImagenHabitacion
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
@@ -29,15 +29,18 @@ def View_Inicio (request):
     imagenes = Galeria.objects.all()
     servicio = Servicio.objects.all()
     habitacion = Habitacion.objects.all()
+    profile = get_object_or_404(Profile, auth_user=request.user)
 
-        # Separar los elementos de la cadena dias_dispo en una lista
+
+    # Separar los elementos de la cadena dias_dispo en una lista
     for c in servicio:
         c.dias_dispo = c.dias_dispo.split("-")
 
     context = {
         'imagenes':imagenes,
         'servicio': servicio,
-        'habitacion': habitacion
+        'habitacion': habitacion,
+        'profile':profile
     }
 
     return render (request,'Index/Home.html', context)
@@ -57,20 +60,22 @@ def Estado_Servicios (request, id):
     return redirect ('/Servicios/Index')
 
 def servicios_ocultos(request):
-    
+    profile = get_object_or_404(Profile, auth_user=request.user)
     servicios_ocultos = Servicio.objects.filter(estado=False)
 
         # Separar los elementos de la cadena dias_dispo en una lista
     for c in servicios_ocultos:
         c.dias_dispo = c.dias_dispo.split("-")
 
-    return render(request, 'Servicios/ServiciosOcultos.html', {'servicio': servicios_ocultos})
+    return render(request, 'Servicios/ServiciosOcultos.html', {'servicio': servicios_ocultos, 'profile':profile})
 
 def View_Servicios(request):
     categoria = request.GET.get('categoria')
     servicio = Servicio.objects.all()
     cantidad_servicios = Servicio.objects.count()
     imagenes = ImagenServicio.objects.all()
+    profile = get_object_or_404(Profile, auth_user=request.user)
+
 
     if categoria:
         servicio = Servicio.objects.filter(
@@ -84,11 +89,11 @@ def View_Servicios(request):
     context = {
         'servicio': servicio,
         'cantidad_servicios': cantidad_servicios,
-        'imagenes_servicio': imagenes
+        'imagenes_servicio': imagenes,
+        'profile':profile
     }
     
     return render(request, 'Servicios/Index.html', context)
-
 
 def Crear_Servicio(request):
     if request.method == 'POST':
@@ -126,7 +131,7 @@ def Crear_Servicio(request):
         
         # Verificar que el precio sea un número positivo
         try:
-            precio = float(precio)
+            precio = int(precio)
             if precio < 0:
                 raise ValueError
         except (ValueError, TypeError):
@@ -260,7 +265,7 @@ def Actualizar_Servicios(request, id):
             
             # Verificar que el precio no sea un número negativo
             precio = request.POST.get('precio')
-            if float(precio) < 0:
+            if int(precio) < 0:
                 messages.error(request, 'El precio no puede ser un número negativo.')
                 return redirect(f'/Servicio/Actualizar/{id}')
         
@@ -606,7 +611,7 @@ def Reserva_Servicio(request, id):
         reserva.estado = 1
         reserva.num_personas = num_personas
         precio = servicio.precio
-        reserva.precio_total = int(num_personas) * float(precio)
+        reserva.precio_total = int(num_personas) * int(precio)
 
         reserva.save()
         
@@ -648,7 +653,7 @@ def Estado_Reserva(request, id):
     return redirect ('/Reservas/ListadoReservas')
 
 def Reservas_Usuario (request):
-
+    
     reservas = ReservaServicio.objects.all()
     profile = Profile.objects.all()
 
@@ -713,17 +718,20 @@ def Listado_Restaurantes (request):
 #region Habitaciones
 
 def View_Habitaciones (request):
-
+    imagenes = ImagenHabitacion.objects.all()
     habitacion = Habitacion.objects.all()
     cantidad_habitaciones = Habitacion.objects.count()
 
     context = {'habitacion':habitacion,
-               'cantidad_habitaciones':cantidad_habitaciones}
+               'cantidad_habitaciones':cantidad_habitaciones,
+               'imagenes_habitacion':imagenes}
 
     return render (request, 'Habitaciones/Index.html', context)
 
 def Agregar_Habitacion(request):
+    
     acomodacion = TipoHabitacion.objects.all()
+    
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
         foto = request.FILES['foto']
@@ -731,10 +739,26 @@ def Agregar_Habitacion(request):
         precio = request.POST.get('precio')
         estado = request.POST.get('estado')
         tipo_habitacion = request.POST.get('tipo')
+        imagenes = request.FILES.getlist('url_img')
+        
         habitacion = Habitacion(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,  tipo_habitacion_id=tipo_habitacion)
+        
         habitacion.save()
+        
+        for imagen in imagenes:
+            try:
+                imagen_habitacion = ImagenHabitacion(habitacion_id=habitacion.id, url_img=imagen)
+                ext = imagen.name.split('.')[-1].lower()
+                imagen_habitacion.url_img.name = f'ImgH_{habitacion.id}_{str(uuid.uuid4())[:8]}.{ext}'
+                imagen_habitacion.save()
+            except ValidationError as e:
+                messages.error(request, e.message)
+                return redirect('/Habitacion/Agregar')
+        
         return redirect('/Habitaciones/Index')
+    
     context = {'Tipo_Habitacion': acomodacion}
+    
     return render(request, 'Habitaciones/AgregarHabitacion.html', context)
 
 def Tipo_Habitacion (request):

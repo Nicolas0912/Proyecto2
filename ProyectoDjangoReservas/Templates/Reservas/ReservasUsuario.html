@@ -12,7 +12,7 @@
             <h6 class="font-light text-gray-500 hover:font-bold pt-2"> <i class='bx bxs-user'></i> {{ c.num_personas }}</h6>
             <h6 class="font-light text-gray-500 hover:font-bold pt-2">Precio Total: {{ c.precio_total }}</h6>
             <p class="text-sm text-gray-400 hover:text-gray-500 pt-2 pb-5">{{ c.servicio.descripcion}}</p>
-            <a href="#" class="rounded-lg py-2 px-4 text-center text-white bg-blue-300 hover:bg-blue-500">Ver Servicio</a>
+            <a href="/Reservas/ReservarServicio/{{ c.servicio_id }}" class="rounded-lg py-2 px-4 text-center text-white bg-blue-300 hover:bg-blue-500">Ver Servicio</a>
     </div>
         <!-- END Card component -->
         {% endif %}

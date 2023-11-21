@@ -17,7 +17,7 @@
                             <div class="messages mt-4 container" id="alertbox">
                                 <div class="container bg-red-500 flex items-center text-white text-sm font-bold px-4 py-3 relative rounded-lg" role="alert">
                                     {% for message in messages %}
-                                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                    <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                                     {% endfor %}
                                     <span class="absolute top-0 bottom-0 right-0 px-4 py-3 closealertbutton">
                                         <svg class="fill-current h-6 w-6 text-white" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
