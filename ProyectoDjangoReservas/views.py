@@ -1,9 +1,9 @@
 from django.db import connection
 from django.conf import settings
 from django.db.models import Q
-import os, re
+import os, re , random, uuid
+from datetime import datetime, date
 from django.shortcuts import render, get_object_or_404
-from datetime import datetime
 from django.core.files import File
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -13,13 +13,12 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-import random
 from ProyectoDjangoReservas.models import Servicio, Galeria, Restaurante, Profile, TipoHabitacion, Habitacion, ReservaHabitacion, ReservaServicio, ImagenServicio, ImagenHabitacion
 from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
-import uuid
 from django.core.exceptions import ValidationError
+from django.utils.timezone import timezone
 
 
 #region Inicio
@@ -594,21 +593,21 @@ def Usuario_admin(request, id):
 #endregion
 
 #region Reservas
-
 def Reserva_Servicio(request, id):
     servicio = get_object_or_404(Servicio, id=id)
     profile = get_object_or_404(Profile, auth_user=request.user)
     imagenes = ImagenServicio.objects.all()
 
     if request.method == 'POST':
-        fecha = request.POST.get('fecha')
+        fecha_servicio = request.POST.get('fecha_servicio')
         num_personas = request.POST.get('num_personas')
 
         reserva = ReservaServicio()
         reserva.usuario = profile  # Asignar la instancia de Profile
         reserva.servicio = servicio  # Asignar la instancia de Servicio
-        reserva.fecha = datetime.strptime(fecha, '%Y-%m-%d') 
-        reserva.estado = 1
+        reserva.fecha_servicio = datetime.strptime(fecha_servicio, '%Y-%m-%d') 
+        reserva.estado_reserva = False
+        reserva.fecha_reserva = 
         reserva.num_personas = num_personas
         precio = servicio.precio
         reserva.precio_total = int(num_personas) * int(precio)

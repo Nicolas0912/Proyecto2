@@ -38,7 +38,10 @@
                                     <div class="font-semibold text-left">Servicio</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Feccha Inicio</div>
+                                    <div class="font-semibold text-left">Fecha Reserva</div>
+                                </th>
+                                <th class="p-2 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Fecha Servicio</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-left">Nº Personas</div>
@@ -47,7 +50,7 @@
                                     <div class="font-semibold text-left">Precio Total</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Activo</div>
+                                    <div class="font-semibold text-left">Estado Reserva</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-center">Acciones</div>
@@ -78,7 +81,7 @@
                                     </div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.fecha }}</div>
+                                    <div class="text-left">{{ c.fecha_servicio }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="text-left">{{ c.num_personas }}</div>
@@ -87,10 +90,10 @@
                                     <div class="text-left">{{ c.precio_total }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    {% if c.estado == True %}
-                                    <div class="text-left font-medium text-green-500">{{ c.estado }}</div>
+                                    {% if c.estado_reserva == False %}
+                                    <div class="text-left font-medium text-orange-500">Pendiente</div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">{{ c.estado }}</div>
+                                    <div class="text-left font-medium text-red-500">Finalizado</div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">

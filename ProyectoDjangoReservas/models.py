@@ -87,12 +87,13 @@ class ImagenHabitacion(models.Model):
 
 class ReservaServicio(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='ID')
-    estado = models.BooleanField(verbose_name='Estado')
+    estado_reserva = models.BooleanField(verbose_name='Estado')
     usuario = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Id de usuario')
     servicio = models.ForeignKey('Servicio', on_delete=models.CASCADE, verbose_name='Id de servicio')
-    fecha = models.DateField(auto_now=False, auto_now_add=False)
+    fecha_servicio = models.DateField(auto_now=False, auto_now_add=False)
     num_personas= models.IntegerField(null=True, blank=True)
     precio_total = models.CharField(max_length=45, null=True, blank=True)
+    fecha_reserva = models.DateTimeField(auto_now=False, auto_now_add=False)
 
     class Meta:
         db_table = 'reserva_servicio'
