@@ -18,7 +18,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from django.utils.timezone import timezone
+from datetime import datetime
 
 
 #region Inicio
@@ -607,7 +607,7 @@ def Reserva_Servicio(request, id):
         reserva.servicio = servicio  # Asignar la instancia de Servicio
         reserva.fecha_servicio = datetime.strptime(fecha_servicio, '%Y-%m-%d') 
         reserva.estado_reserva = False
-        reserva.fecha_reserva = 
+        reserva.fecha_reserva = datetime.now()
         reserva.num_personas = num_personas
         precio = servicio.precio
         reserva.precio_total = int(num_personas) * int(precio)
@@ -645,7 +645,7 @@ def Estado_Reserva(request, id):
     reserva = ReservaServicio.objects.get(id=id)
 
     # Cambiar el estado actual al estado opuesto
-    reserva.estado = not reserva.estado
+    reserva.estado_reserva = not reserva.estado_reserva
 
     reserva.save()
 
@@ -781,7 +781,7 @@ def Listado_Habitaciones(request):
     habitacion = Habitacion.objects.all()
 
     if busqueda:
-        servicio = Servicio.objects.filter(
+        habitacion = Habitacion.objects.filter(
             Q(nombre__icontains = busqueda)
         ).distinct()
 
@@ -798,7 +798,7 @@ def Listado_Habitaciones(request):
 
 def Estado_Habitacion (request, id):
     habitacion = Habitacion.objects.get(id=id)
-
+    
     # Cambiar el estado actual al estado opuesto
     habitacion.estado = not habitacion.estado
 
@@ -807,8 +807,14 @@ def Estado_Habitacion (request, id):
     return redirect('/Habitaciones/Index')
 
 def Habitacion_Oculta (request):
+    
     habitaciones_ocultos = Habitacion.objects.filter(estado=False)
-
+    
     return render(request, 'Habitaciones/HabitacionesOcultas.html', {'habitacion': habitaciones_ocultos})
+
+def Actualizar_Habitacion (request, id):
+    
+    habitacion = Habitacion.objects.filter(id=id)
+    return render(request, 'Habitaciones/ActualizarHabitacion.html', {'habitacion': habitacion})
 
 #endregion

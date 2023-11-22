@@ -66,9 +66,9 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.estado == True %}
-                                    <div class="text-left font-medium text-green-500"><a href="{% url '/Habitacion/Ocultar/' c.id %}">{{ c.estado }}</a></div>
+                                    <div class="text-left font-medium text-green-500">{{ c.estado }}</div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500"><a href="{% url '/Habitacion/Ocultar/' c.id %}">{{ c.estado }}</a></div>
+                                    <div class="text-left font-medium text-red-500">{{ c.estado }}</div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
@@ -76,7 +76,7 @@
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     <div class="px-5 py-3 text-center">
-                                        <a href="{% url '/Reservas/Estado/' c.id %}" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class="bx bx-edit-alt p-1"></i>Finalizar</a>
+                                        <a href="/Habitaciones/Actualizar/{{ c.id }}" class=" text-sm bg-blue-300 hover:bg-blue-400 text-gray-800 font-semibold py-2 px-4 rounded-l"><i class="bx bx-edit-alt p-1"></i>Editar</a>
                                         <a href="#" class="text-sm bg-red-300 hover:bg-red-400 text-gray-800 font-semibold py-2 px-4 rounded-r"><i class="bx bx-trash p-1"></i>Eliminar</a>
                                     </div>
                                 </td>
@@ -86,8 +86,8 @@
                     </table>
                     <div class="px-5 py-4 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
                         <div class="">
-                            {% if reservas.has_previous %}
-                            <a href="?page={{ reservas.previous_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
+                            {% if habitacion.has_previous %}
+                            <a href="?page={{ habitacion.previous_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
                                 Prev
                             </a>
                             
@@ -95,8 +95,8 @@
                             <a href="?page={{ pagina }}" class="p-2">{{ pagina }}</a>
                             {% endfor %}
                             {% endif %}
-                            {% if reservas.has_next %}
-                            <a href="?page={{ reservas.next_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r ml-2">
+                            {% if habitacion.has_next %}
+                            <a href="?page={{ habitacion.next_page_number }}" class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r ml-2">
                                 Next
                             </a>
                             {% endif %}

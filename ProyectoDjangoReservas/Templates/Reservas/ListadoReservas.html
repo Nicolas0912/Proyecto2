@@ -20,37 +20,37 @@
                         <thead class="text-xs font-semibold uppercase text-gray-500 bg-gray-50">
                             <tr>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Id</div>
+                                    <div class="font-semibold text-center">Id</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Documento</div>
+                                    <div class="font-semibold text-center">Documento</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Usuario</div>
+                                    <div class="font-semibold text-center">Usuario</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Email</div>
+                                    <div class="font-semibold text-center">Email</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Telefono</div>
+                                    <div class="font-semibold text-center">Telefono</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Servicio</div>
+                                    <div class="font-semibold text-center">Servicio</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Fecha Reserva</div>
+                                    <div class="font-semibold text-center">Fecha Reserva</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Fecha Servicio</div>
+                                    <div class="font-semibold text-center">Fecha Seleccionada</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Nº Personas</div>
+                                    <div class="font-semibold text-center">Nº Personas</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Precio Total</div>
+                                    <div class="font-semibold text-center">Precio Total</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Estado Reserva</div>
+                                    <div class="font-semibold text-center">Estado Reserva</div>
                                 </th>
                                 <th class="p-2 whitespace-nowrap">
                                     <div class="font-semibold text-center">Acciones</div>
@@ -61,39 +61,42 @@
                             {% for c in reservas %}
                             <tr>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium text-blue-500">{{ c.id }}</div>
+                                    <div class="text-center font-medium text-blue-500">{{ c.id }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.documento }}</div>
+                                    <div class="text-center">{{ c.usuario.documento }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.auth_user.first_name }} {{ c.usuario.auth_user.last_name }}</div>
+                                    <div class="text-center">{{ c.usuario.auth_user.first_name }} {{ c.usuario.auth_user.last_name }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.auth_user }}</div>
+                                    <div class="text-center">{{ c.usuario.auth_user }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.usuario.telefono }}</div>
+                                    <div class="text-center">{{ c.usuario.telefono }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">
+                                    <div class="text-center">
                                         <div class="font-medium text-gray-800">{{ c.servicio.nombre}}</div>
                                     </div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.fecha_servicio }}</div>
+                                    <div class="text-center">{{ c.fecha_reserva }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.num_personas }}</div>
+                                    <div class="text-center">{{ c.fecha_servicio }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">{{ c.precio_total }}</div>
+                                    <div class="text-center">{{ c.num_personas }}</div>
+                                </td>
+                                <td class="p-2 whitespace-nowrap">
+                                    <div class="text-center">{{ c.precio_total }}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
                                     {% if c.estado_reserva == False %}
-                                    <div class="text-left font-medium text-orange-500">Pendiente</div>
+                                    <div class="text-center font-medium text-orange-300">Pendiente</div>
                                     {% else %}
-                                    <div class="text-left font-medium text-red-500">Finalizado</div>
+                                    <div class="text-center font-medium text-red-500">Finalizado</div>
                                     {% endif %}
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
