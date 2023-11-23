@@ -812,9 +812,54 @@ def Habitacion_Oculta (request):
     
     return render(request, 'Habitaciones/HabitacionesOcultas.html', {'habitacion': habitaciones_ocultos})
 
-def Actualizar_Habitacion (request, id):
+def Actualizar_Habitacion(request, id):
     
-    habitacion = Habitacion.objects.filter(id=id)
-    return render(request, 'Habitaciones/ActualizarHabitacion.html', {'habitacion': habitacion})
+    if request.method == 'POST':
+        
+        # Obtener los datos actualizados del formulario
+        nombre = request.POST.get('nombre')
+        foto = request.FILES['foto']
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        estado = request.POST.get('estado')
+        tipo_habitacion = request.POST.get('tipo')
+        imagenes = request.FILES.getlist('url_img')
+        
+        # Obtener la habitación existente
+        habitacion = get_object_or_404(Habitacion, id=id)
+        acomodacion = TipoHabitacion.objects.all()
+        
+        # Verificar si la imagen existe
+        if habitacion.foto:
+            ruta_foto = "media/" + str(habitacion.foto)    
+            # Eliminar la imagen existente
+            if os.path.exists(ruta_foto):
+                os.remove(ruta_foto)
+        
+        # Actualizar los campos de la habitación con los nuevos datos
+        habitacion.nombre = nombre
+        habitacion.foto = foto
+        habitacion.descripcion = descripcion
+        habitacion.precio = precio
+        habitacion.estado = estado
+        habitacion.tipo_habitacion_id = tipo_habitacion
+        
+        habitacion.save()
+        
+        for imagen in imagenes:
+            try:
+                imagen_habitacion = ImagenHabitacion(habitacion_id=habitacion.id, url_img=imagen)
+                ext = imagen.name.split('.')[-1].lower()
+                imagen_habitacion.url_img.name = f'ImgH_{habitacion.id}_{str(uuid.uuid4())[:8]}.{ext}'
+                imagen_habitacion.save()
+            except ValidationError as e:
+                messages.error(request, e.message)
+                return redirect(f'/Habitacion/Actualizar/{id}')
+        
+        return redirect('/Habitaciones/Index')
+    
+    context = {'Tipo_Habitacion': acomodacion, 'habitacion': habitacion}
+    
+    return render(request, 'Habitaciones/ActualizarHabitacion.html', context)
 
 #endregion

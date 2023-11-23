@@ -13,7 +13,7 @@
                     <div class="messages mt-4 container" id="alertbox">
                         <div class="container bg-red-500 flex items-center text-white text-sm font-bold px-4 py-3 relative rounded-lg" role="alert">
                             {% for message in messages %}
-                            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                             {% endfor %}
                             <span class="absolute top-0 bottom-0 right-0 px-4 py-3 closealertbutton">
                                 <svg class="fill-current h-6 w-6 text-white" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -35,8 +35,49 @@
                         <label class="block pt-2">
                             <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Foto de Portada:</span>
                             <input type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" name="foto" required onchange="previewImage(event)"/>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG or JPEG (MAX. 400kb).</p>
                         </label>
+                        <img id="preview-image" class="max-h-40 max-w-40 rounded-lg" alt="Vista previa de la imagen" style="display: none;">
                     </div>
+                    <div class="grid grid-cols-2 gap-5">
+                        <label class="block pt-2">
+                            <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fotos de la Habitacion (Maximo 5):</span>
+                            <input type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" name="url_img" multiple onchange="previewImages(event)"/>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG or JPEG (MAX. 400kb).</p>
+                        </label>
+                        <div id="preview-container" class="columns-4 gap-2">
+
+                        </div>
+                    </div>
+                    <label class="block mt-4 text-sm">
+                        <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripcion:</span>
+                        <textarea id="message" rows="4" class="block p-2.5 w-full max-h-40 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="descripcion" placeholder="{{ c.descripcion }}"></textarea>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Limite de Caracteres (500).</p>
+                    </label>
+                    <label class="block mt-4 text-sm">
+                        <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio:</span>
+                        <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="precio"required placeholder="{{ c.precio }}" type="number"/>
+                    </label>
+                    <label class="block mt-4 text-sm">
+                        <span class="block text-sm font-medium text-gray-900 dark:text-white">Estado:</span>
+                        <select name="estado" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                            <option value="True">Visible</option>
+                            <option value="False">Oculto</option>
+                        </select>
+                    </label>
+                    <label class="block mt-4 text-sm">
+                        <span class="block text-sm font-medium text-gray-900 dark:text-white">Tipo Habitacion</span>
+                        <select name="tipo" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                            {% for e in Tipo_Habitacion %}
+                            <option value="{{ e.id }}">Acomodacion: {{ e.tipo }} - Camas: {{ e.camas }} - Baños: {{ e.banios }} - Personas: {{ e.personas }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <a href="/Habitacion/Tipo" class="block w-28 px-2 py-2 mb-10 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-gray-400 border border-transparent rounded-lg active:bg-blue-700 hover:bg-blue-800 focus:outline-none focus:shadow-outline-blue">
+                        Agregar Tipo
+                    </a>
+                    <input class="block w-80
+                    px-4 py-2 mt-8 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-700 border border-transparent rounded-lg active:bg-blue-700 hover:bg-blue-800 focus:outline-none focus:shadow-outline-blue" type="submit" value="Actualizar Habitacion">
                     {% endfor %}
                 </form>
             </div>
