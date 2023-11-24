@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
-from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen, Reserva_Servicio, Listado_Reservas, Estado_Reserva, Reservas_Usuario, View_Restaurantes, Agregar_Restaurante, Listado_Restaurantes, Perfil_Usuarios, Estado_Usuario, Usuario_admin, View_Habitaciones, Agregar_Habitacion, Tipo_Habitacion, Listado_Habitaciones, Estado_Habitacion, Habitacion_Oculta, Actualizar_Habitacion
+from ProyectoDjangoReservas.views import View_Inicio, View_Servicios, Crear_Usuario, View_Login, LogoutUser, Listado_Usuarios, Actualizar_Usuarios, Eliminar_Usuario, Crear_Servicio, Listado_Servicios, Actualizar_Servicios, Eliminar_Servicio, Estado_Servicios, servicios_ocultos, View_Galeria, Subir_imagenes, Listado_Imagenes, Estado_imagenes, Eliminar_imagen, Reserva_Servicio, Listado_Reservas, Estado_Reserva, Reservas_Usuario, View_Restaurantes, Agregar_Restaurante, Listado_Restaurantes, Perfil_Usuarios, Estado_Usuario, Usuario_admin, View_Habitaciones, Agregar_Habitacion, Tipo_Habitacion, Listado_Habitaciones, Estado_Habitacion, Habitacion_Oculta, Actualizar_Habitacion, Eliminar_Habitacion, Eliminar_Reserva
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -58,6 +58,7 @@ urlpatterns = [
     path('Reservas/ListadoReservas',Listado_Reservas),
     path('Reservas/Estado/<int:id>',Estado_Reserva, name='/Reservas/Estado/'),
     path('Reservas/MisReservas', Reservas_Usuario),
+    path('Reservas/Eliminar/<int:id>', Eliminar_Reserva, name='/Reservas/Eliminar/'),
 
     path('Restaurantes/Agregar', Agregar_Restaurante),
     path('Restaurantes/Listado', Listado_Restaurantes),
@@ -67,7 +68,8 @@ urlpatterns = [
     path('Habitaciones/Listado', Listado_Habitaciones),
     path('Habitacion/Ocultar/<int:id>', Estado_Habitacion, name='/Habitacion/Ocultar/'),
     path('Habitaciones/Ocultas', Habitacion_Oculta, name='/Habitaciones/Ocultas'),
-    path('Habitaciones/Actualizar/<int:id>',Actualizar_Habitacion, name='/Habiatacion/Actualizar/')
+    path('Habitaciones/Actualizar/<int:id>',Actualizar_Habitacion, name='/Habiatacion/Actualizar/'),
+    path('Habitaciones/Eliminar/<int:id>', Eliminar_Habitacion, name='/Habitaciones/Eliminar/')
 
 ]
 

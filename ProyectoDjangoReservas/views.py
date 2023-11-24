@@ -659,6 +659,13 @@ def Reservas_Usuario (request):
     context = {'reservas':reservas, 'profile':profile}
 
     return render(request,'Reservas/ReservasUsuario.html',context)
+
+def Eliminar_Reserva(id):
+    reserva = ReservaServicio.objects.get(id=id)
+    
+    reserva.delete()
+    
+    return redirect('/Reservas/ListadoReservas')
 #endregion
 
 #region restaurantes
@@ -815,7 +822,6 @@ def Habitacion_Oculta (request):
 def Actualizar_Habitacion(request, id):
     
     if request.method == 'POST':
-        
         # Obtener los datos actualizados del formulario
         nombre = request.POST.get('nombre')
         foto = request.FILES['foto']
@@ -825,16 +831,7 @@ def Actualizar_Habitacion(request, id):
         tipo_habitacion = request.POST.get('tipo')
         imagenes = request.FILES.getlist('url_img')
         
-        # Obtener la habitación existente
-        habitacion = get_object_or_404(Habitacion, id=id)
-        acomodacion = TipoHabitacion.objects.all()
-        
-        # Verificar si la imagen existe
-        if habitacion.foto:
-            ruta_foto = "media/" + str(habitacion.foto)    
-            # Eliminar la imagen existente
-            if os.path.exists(ruta_foto):
-                os.remove(ruta_foto)
+        habitacion = Habitacion.objects.get(id=id)
         
         # Actualizar los campos de la habitación con los nuevos datos
         habitacion.nombre = nombre
@@ -843,6 +840,9 @@ def Actualizar_Habitacion(request, id):
         habitacion.precio = precio
         habitacion.estado = estado
         habitacion.tipo_habitacion_id = tipo_habitacion
+        
+        ruta_foto = "media/"+str(habitacion.foto)
+        os.remove(ruta_foto)
         
         habitacion.save()
         
@@ -858,8 +858,34 @@ def Actualizar_Habitacion(request, id):
         
         return redirect('/Habitaciones/Index')
     
+    habitacion = Habitacion.objects.filter(id=id)
+    acomodacion = TipoHabitacion.objects.all()
     context = {'Tipo_Habitacion': acomodacion, 'habitacion': habitacion}
     
     return render(request, 'Habitaciones/ActualizarHabitacion.html', context)
 
+def Eliminar_Habitacion(request, id):
+    # Obtener la habitación por su ID
+    habitacion = get_object_or_404(Habitacion, pk=id)
+    
+    # Obtener todas las imágenes relacionadas con la habitación
+    imagenes_habitacion = ImagenHabitacion.objects.filter(habitacion_id=habitacion.id)
+    
+    ruta_foto = "media/"+str(habitacion.foto)
+    os.remove(ruta_foto)
+    
+    # Eliminar la habitación y las imágenes
+    habitacion.delete()
+    
+    for imagen in imagenes_habitacion:
+        # Eliminar el archivo de la imagen del sistema de archivos
+        ruta_foto = "media/"+str(imagen.url_img)
+        os.remove(ruta_foto)
+        # Eliminar la imagen de la base de datos
+        imagen.delete()
+    
+    
+                
+    return redirect('/Habitaciones/Listado')
+    
 #endregion
