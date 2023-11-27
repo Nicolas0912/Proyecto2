@@ -30,7 +30,10 @@
                             <div class="font-semibold text-left">Descripcion</div>
                         </th>
                         <th class="p-2 whitespace-nowrap">
-                            <div class="font-semibold text-left">ubicacion</div>
+                            <div class="font-semibold text-left">Direccion</div>
+                        </th>
+                        <th class="p-2 whitespace-nowrap">
+                            <div class="font-semibold text-left">Ubicacion</div>
                         </th>
                         <th class="p-2 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
@@ -52,7 +55,7 @@
                             </div>
                         </td>
                         <td class="p-2">
-                                <img class="h-full w-80 rounded-xl" src="../media/{{ c.url_img }}" alt="{{ c.url_img }}">
+                                <img class="h-64 w-64 rounded-xl" src="../media/{{ c.url_img }}" alt="{{ c.url_img }}">
                         </td>
                         <td class="p-2 whitespace-normal">
                             <div class="text-left">
@@ -60,7 +63,10 @@
                             </div>
                         </td>
                         <td class="p-2 whitespace-nowrap">
-                            <div class="text-left">{{ c.ubicacion }}</div>
+                            <div class="text-left">{{ c.direccion }}</div>
+                        </td>
+                        <td class="p-2 whitespace-wrap">
+                            <div class="text-left w-64 truncate">{{ c.ubicacion }}</div>
                         </td>
                         <td class="p-2 whitespace-nowrap">
                             {% if c.is_active == True %}

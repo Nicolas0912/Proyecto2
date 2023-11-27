@@ -19,7 +19,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from datetime import datetime
-
+import requests
+from urllib3.exceptions import InsecureRequestWarning
+from django.core.mail import send_mail
 
 #region Inicio
 
@@ -611,8 +613,19 @@ def Reserva_Servicio(request, id):
         reserva.num_personas = num_personas
         precio = servicio.precio
         reserva.precio_total = int(num_personas) * int(precio)
-
+        
         reserva.save()
+        
+        # Desactivar verificación SSL antes de enviar el correo electrónico
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        
+        # Enviar correo electrónico de notificación
+        subject = 'Reserva de servicio exitosa'
+        message = f'Tu reserva para el servicio {servicio.nombre} ha sido confirmada. Fecha del servicio: {fecha_servicio}.'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = [profile.auth_user.email]
+
+        send_mail(subject, message, from_email, to_email, fail_silently=False)
         
         return redirect('/Servicios/Index')
 
@@ -671,15 +684,10 @@ def Eliminar_Reserva(id):
 #region restaurantes
 
 def View_Restaurantes (request):
-
     restaurantes = Restaurante.objects.all()
-
     cantidad_restaurantes = Restaurante.objects.count()
-
     context = {'restaurantes':restaurantes,
                'cantidad_restaurantes': cantidad_restaurantes}
-
-
     return render (request,'Restaurantes/Index.html', context)
 
 def Agregar_Restaurante(request):
@@ -689,17 +697,16 @@ def Agregar_Restaurante(request):
             restaurante.name = request.POST.get('name')
             restaurante.url_img = request.FILES['url_img']
             restaurante.descripcion = request.POST.get('descripcion')
-            restaurante.ubicacion = request.POST.get('ubicacion')
+            restaurante.direccion = request.POST.get('direccion')
             estado = request.POST.get('is_active')
-            estado = True if estado == 'False' else False
+            estado = True
+            restaurante.ubicacion = request.POST.get('ubicacion')
             restaurante.is_active = estado
             restaurante.save()  # Guarda el restaurante en la base de datos
-
             return redirect('/Restaurantes/Index')
     return render(request, 'Restaurantes/AgregarRestaurantes.html')
 
 def Listado_Restaurantes (request):
-
     busqueda = request.GET.get('buscar')
 
     restaurante = Restaurante.objects.all()
@@ -748,6 +755,9 @@ def Agregar_Habitacion(request):
         imagenes = request.FILES.getlist('url_img')
         
         habitacion = Habitacion(nombre=nombre, foto=foto, descripcion=descripcion, precio=precio, estado=estado,  tipo_habitacion_id=tipo_habitacion)
+        
+        ext = foto.name.split('.')[-1].lower()
+        habitacion.foto.name = f'ImgH_P_{habitacion.id}_{str(uuid.uuid4())[:8]}.{ext}'
         
         habitacion.save()
         
@@ -832,6 +842,18 @@ def Actualizar_Habitacion(request, id):
         imagenes = request.FILES.getlist('url_img')
         
         habitacion = Habitacion.objects.get(id=id)
+        # Obtener todas las imágenes relacionadas con la habitación
+        imagenes_habitacion = ImagenHabitacion.objects.filter(habitacion_id=habitacion.id)
+    
+        for imagen in imagenes_habitacion:
+            # Eliminar el archivo de la imagen del sistema de archivos
+            ruta_imagenes = "media/"+str(imagen.url_img)
+            os.remove(ruta_imagenes)
+            # Eliminar la imagen de la base de datos
+            imagen.delete()
+            
+        ruta_foto = "media/"+str(habitacion.foto)
+        os.remove(ruta_foto)
         
         # Actualizar los campos de la habitación con los nuevos datos
         habitacion.nombre = nombre
@@ -841,8 +863,8 @@ def Actualizar_Habitacion(request, id):
         habitacion.estado = estado
         habitacion.tipo_habitacion_id = tipo_habitacion
         
-        ruta_foto = "media/"+str(habitacion.foto)
-        os.remove(ruta_foto)
+        ext = foto.name.split('.')[-1].lower()
+        habitacion.foto.name = f'ImgH_P_{habitacion.id}_{str(uuid.uuid4())[:8]}.{ext}'
         
         habitacion.save()
         
@@ -871,12 +893,6 @@ def Eliminar_Habitacion(request, id):
     # Obtener todas las imágenes relacionadas con la habitación
     imagenes_habitacion = ImagenHabitacion.objects.filter(habitacion_id=habitacion.id)
     
-    ruta_foto = "media/"+str(habitacion.foto)
-    os.remove(ruta_foto)
-    
-    # Eliminar la habitación y las imágenes
-    habitacion.delete()
-    
     for imagen in imagenes_habitacion:
         # Eliminar el archivo de la imagen del sistema de archivos
         ruta_foto = "media/"+str(imagen.url_img)
@@ -884,8 +900,12 @@ def Eliminar_Habitacion(request, id):
         # Eliminar la imagen de la base de datos
         imagen.delete()
     
+    ruta_foto = "media/"+str(habitacion.foto)
+    os.remove(ruta_foto)
     
-                
+    # Eliminar la habitación y las imágenes
+    habitacion.delete()
+    
     return redirect('/Habitaciones/Listado')
     
 #endregion

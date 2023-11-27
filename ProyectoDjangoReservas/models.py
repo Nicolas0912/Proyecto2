@@ -46,8 +46,9 @@ class Restaurante(models.Model):
     url_img = models.ImageField(upload_to='restaurante_bd/', null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     descripcion = models.CharField(max_length=500, blank=True, null=True)
-    ubicacion = models.CharField(max_length=255,blank=True, null=True)
+    ubicacion = models.CharField(max_length=500,blank=True, null=True)
     is_active = models.BooleanField(null=True, blank=True)
+    direccion = models.CharField(max_length=255,blank=True, null=True)
     
     class Meta:
         db_table = 'restaurante'
