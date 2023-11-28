@@ -139,14 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True  # O puedes cambiar a False si estás utilizando un puerto sin cifrado TLS
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'nmedina018@misena.edu.co'
 EMAIL_HOST_PASSWORD = 'dptjwywleysxrffq'
-EMAIL_USE_TLS = True  # O puedes cambiar a False si estás utilizando un puerto sin cifrado TLS
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'nmedina018@misena.edu.co'
-
-
-
-from django.core.mail import send_mail
-send_mail('Asunto de prueba','Este es un mensaje de prueba enviado desde Django.','nmedina018@misena.edu.co',['nmedina018@misena.edu.co'],fail_silently=False)

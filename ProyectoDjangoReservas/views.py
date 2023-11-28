@@ -22,6 +22,7 @@ from datetime import datetime
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 from django.core.mail import send_mail
+from ProyectoDjangoReservas.settings import EMAIL_HOST_USER
 
 #region Inicio
 
@@ -614,18 +615,17 @@ def Reserva_Servicio(request, id):
         precio = servicio.precio
         reserva.precio_total = int(num_personas) * int(precio)
         
+        send_mail(
+            'Prueba',
+            'Este es el cuerpo del correo',
+            EMAIL_HOST_USER,
+            ['nmedina018@misena.edu.co'],
+            fail_silently=False,
+        )
+        
         reserva.save()
         
-        # Desactivar verificación SSL antes de enviar el correo electrónico
-        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-        
-        # Enviar correo electrónico de notificación
-        subject = 'Reserva de servicio exitosa'
-        message = f'Tu reserva para el servicio {servicio.nombre} ha sido confirmada. Fecha del servicio: {fecha_servicio}.'
-        from_email = settings.DEFAULT_FROM_EMAIL
-        to_email = [profile.auth_user.email]
 
-        send_mail(subject, message, from_email, to_email, fail_silently=False)
         
         return redirect('/Servicios/Index')
 
