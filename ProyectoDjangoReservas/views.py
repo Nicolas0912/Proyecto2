@@ -19,10 +19,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from datetime import datetime
-import requests
-from urllib3.exceptions import InsecureRequestWarning
 from django.core.mail import send_mail
-from ProyectoDjangoReservas.settings import EMAIL_HOST_USER
 
 #region Inicio
 
@@ -618,7 +615,7 @@ def Reserva_Servicio(request, id):
         send_mail(
             'Prueba',
             'Este es el cuerpo del correo',
-            EMAIL_HOST_USER,
+            'nmedina018@misena.edu.co',
             ['nmedina018@misena.edu.co'],
             fail_silently=False,
         )
@@ -907,5 +904,17 @@ def Eliminar_Habitacion(request, id):
     habitacion.delete()
     
     return redirect('/Habitaciones/Listado')
+    
+#endregion
+
+#region reserva habitacion
+
+def Reserva_Habitacion(request, id):
+    habitacion = get_object_or_404(Habitacion, id=id)
+    profile = get_object_or_404(Profile, auth_user=request.user)
+    imagenes = ImagenHabitacion.objects.all()
+        
+    context = {'habitacion': habitacion, 'profile': profile, 'imagenes_habitacion': imagenes}
+    return render(request, 'Reservas/ReservarHabitacion.html', context)
     
 #endregion

@@ -1,0 +1,73 @@
+{% include "Inc/Header.html" %}
+
+<section class="bg-white dark:bg-gray-900">
+    <div class="flex justify-center h-screen gap-x-20 pb-10 pt-10">
+        <div class="grid grid-flow-row-dense grid-cols-2 grid-rows-3 gap-2 p-10 h-full max-w-2xl">
+            <div class="">
+                <a class="" href="/media/{{ habitacion.foto }}" data-lightbox="galeria">
+                    <img class="rounded-lg h-full w-full" src="/media/{{ habitacion.foto }}" alt="">
+                </a>
+            </div>
+            {% for i in imagenes_habitacion %}
+            {% if i.habitacion_id == habitacion.id %}
+            <div class="">
+                <a href="/media/{{ i.url_img }}" data-lightbox="galeria">
+                    <img class="rounded-lg h-full w-full" src="/media/{{ i.url_img }}" alt="">
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="h-auto max-w-md justify-self-center">
+            <div class="pt-4">
+                <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">{{ habitacion.nombre }}</h1>
+            </div>
+            <div class="py-4">
+                <p class="text-justify">{{ habitacion.descripcion }}</p> 
+            </div>
+            <div class="py-4">
+                <div class="">
+                    <p class="border-none text-3xl font-semibold text-gray-800">$ {{ habitacion.precio }}</p>
+                    <input class="border-none hidden text-3xl font-semibold text-gray-800" disabled id="precio" value="{{ habitacion.precio }}">
+                </div>
+            </div>
+            <div class="flex justify-between">
+                <div class="flex flex-row pt-1 text-2xl">
+                    <div>
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pr-4">
+                            <i class='mr-1 bx bx-home-circle'></i>{{ habitacion.tipo_habitacion.tipo }}
+                        <h5>
+                    </div>
+                    <div>
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pr-4">
+                            <i class='mr-1 bx bxs-bed'></i>{{ habitacion.tipo_habitacion.camas }}
+                        </h5>
+                    </div>
+                    <div>
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pr-4">
+                            <i class='bx bxs-bath mr-1'></i>{{ habitacion.tipo_habitacion.banios }}
+                        </h5>
+                    </div>
+                    <div>
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pr-4">
+                            <i class='bx bxs-group mr-1'></i>{{ habitacion.tipo_habitacion.personas }}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-6">
+                <span class="text-lg font-semibold text-blue-500 capitalize dark:text-white">Datos de Reserva:</span>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="pt-4">
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% include "Inc/Footer.html" %}
