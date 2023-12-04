@@ -28,7 +28,7 @@ def View_Inicio (request):
     imagenes = Galeria.objects.all()
     servicio = Servicio.objects.all()
     habitacion = Habitacion.objects.all()
-    profile = get_object_or_404(Profile, auth_user=request.user)
+    profile = Profile.auth_user
 
 
     # Separar los elementos de la cadena dias_dispo en una lista
@@ -59,7 +59,7 @@ def Estado_Servicios (request, id):
     return redirect ('/Servicios/Index')
 
 def servicios_ocultos(request):
-    profile = get_object_or_404(Profile, auth_user=request.user)
+    profile = Profile.auth_user
     servicios_ocultos = Servicio.objects.filter(estado=False)
 
         # Separar los elementos de la cadena dias_dispo en una lista
@@ -73,7 +73,7 @@ def View_Servicios(request):
     servicio = Servicio.objects.all()
     cantidad_servicios = Servicio.objects.count()
     imagenes = ImagenServicio.objects.all()
-    profile = get_object_or_404(Profile, auth_user=request.user)
+    profile = Profile.auth_user
 
 
     if categoria:
@@ -612,17 +612,14 @@ def Reserva_Servicio(request, id):
         precio = servicio.precio
         reserva.precio_total = int(num_personas) * int(precio)
         
-        send_mail(
-            'Prueba',
-            'Este es el cuerpo del correo',
-            'nmedina018@misena.edu.co',
-            ['nmedina018@misena.edu.co'],
-            fail_silently=False,
-        )
-        
-        reserva.save()
-        
+        subject = 'Reserva de servicio exitosa'
+        message = f'Tu reserva para el servicio {servicio.nombre} ha sido confirmada. Fecha del servicio: {fecha_servicio}.'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = [profile.auth_user.email]
 
+        send_mail(subject, message, from_email, to_email, fail_silently=False)
+    
+        reserva.save()
         
         return redirect('/Servicios/Index')
 

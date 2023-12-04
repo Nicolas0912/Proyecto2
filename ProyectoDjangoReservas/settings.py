@@ -137,11 +137,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True  # O puedes cambiar a False si estás utilizando un puerto sin cifrado TLS
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'medinacardonanicolas12@gmail.com'
-EMAIL_HOST_PASSWORD = 'kkovoifmmcwcnhsa'
-EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'medinacardonanicolas12@gmail.com'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '12c03778d4f804'
+EMAIL_HOST_PASSWORD = 'ad937d54556d4d'
+EMAIL_PORT = '2525'
